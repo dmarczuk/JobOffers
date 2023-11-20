@@ -3,32 +3,26 @@ package pl.joboffers.domain.loginandregister;
 class UserValidator {
 
     public boolean hasCorrectAllArguments(User user) {
-        if (!hasCorrectUsername()){
+        if (!hasCorrectUsername(user.getUsername())) {
             return false;
         }
-        if (!hasCorrectPassword()){
+        if (!hasCorrectPassword(user.getPassword())) {
             return false;
         }
-        if (!hasCorrectEmail()){
-            return false;
-        }
-        return true;
+        return hasCorrectEmail(user.getEmail());
 
     }
 
-    private boolean hasCorrectUsername() {
-
-        return true;
+    private boolean hasCorrectUsername(String username) {
+        return !username.equals("");
     }
 
-    private boolean hasCorrectPassword() {
-
-        return true;
+    private boolean hasCorrectPassword(String password) {
+        return !password.equals("");
     }
 
-    private boolean hasCorrectEmail() {
-
-        return true;
+    private boolean hasCorrectEmail(String email) {
+        return !email.equals("");
     }
 
 

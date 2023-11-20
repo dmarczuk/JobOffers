@@ -84,15 +84,24 @@ class LoginAndRegisterFacadeTest {
         User user = new User("FirstUser", "pass", "email@com");
 
         //when
-        Optional<User> result = loginAndRegisterFacade.findByUsername("FirstUser");
+        loginAndRegisterFacade.register(user);
+        User result = loginAndRegisterFacade.findByUsername("FirstUser");
 
         //then
-        assertThat(result).isEqualTo("User exist in database");
+        assertThat(result).isEqualTo(user);
 
     }
 
     @Test
     public void should_not_find_user_in_database () {
+        //given
+        User user = new User("FirstUser", "pass", "email@com");
+
+        //when
+        User result = loginAndRegisterFacade.findByUsername("FirstUser");
+
+        //then
+        assertThat(result).isNull();
 
     }
 

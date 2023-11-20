@@ -15,7 +15,7 @@ public class LoginAndRegisterFacade {
     }
 
     public String register(User user) {
-        if(findByUsername(user.getUsername()).isPresent()) {
+        if(findByUsername(user.getUsername()) != null) {
             return "User exist in database";
         }
         if(userValidator.hasCorrectAllArguments(user)) {
@@ -26,10 +26,11 @@ public class LoginAndRegisterFacade {
         }
     }
 
-    public Optional<User> findByUsername(String username) {
+    public User findByUsername(String username) {
         return listOfUsers.stream()
                 .filter(user -> user.getUsername().equals(username))
-                .findAny();
+                .findAny()
+                .orElse(null);
         //return new User("username", "pass", "email");
     }
 }
