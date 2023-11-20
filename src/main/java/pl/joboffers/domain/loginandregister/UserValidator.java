@@ -1,7 +1,20 @@
 package pl.joboffers.domain.loginandregister;
 
-public class UserValidator {
+class UserValidator {
 
+    public boolean hasCorrectAllArguments(User user) {
+        if (!hasCorrectUsername()){
+            return false;
+        }
+        if (!hasCorrectPassword()){
+            return false;
+        }
+        if (!hasCorrectEmail()){
+            return false;
+        }
+        return true;
+
+    }
 
     private boolean hasCorrectUsername() {
 
