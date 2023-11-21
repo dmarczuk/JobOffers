@@ -2,7 +2,7 @@ package pl.joboffers.domain.loginandregister;
 
 import java.util.Objects;
 
-public class User {
+class User {
 
     private String Username;
     private String password;
