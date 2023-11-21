@@ -1,7 +1,8 @@
 package pl.joboffers.domain.offer;
 
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public class InMemoryOfferRepositoryTestImpl implements OfferRepository {
     Map<Integer, Offer> inMemoryDatabase = new ConcurrentHashMap<>();
@@ -14,5 +15,10 @@ public class InMemoryOfferRepositoryTestImpl implements OfferRepository {
     @Override
     public Offer findById(Integer id) {
         return inMemoryDatabase.get(id);
+    }
+
+    @Override
+    public Set<Offer> findAll() {
+        return new HashSet<>(inMemoryDatabase.values());
     }
 }

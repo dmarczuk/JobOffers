@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,7 +39,7 @@ class OfferFacadeTest {
         String result = offerFacade.saveOffer(secondOffer);
 
         //then
-        assertThat(result).isEqualTo("failed");
+        assertThat(result).isEqualTo("offer exist in database");
 
     }
 
@@ -83,15 +84,34 @@ class OfferFacadeTest {
         );
 
         //when
-        List<Offer> allOffers = offerFacade.findAllOffers();
+        listOffers.forEach(offer -> offerFacade.saveOffer(offer));
+        Set<Offer> allOffers = offerFacade.findAllOffers();
 
         //then
         assertThat(allOffers.size()).isEqualTo(4);
-        assertThat(allOffers.get(0)).isEqualTo(new Offer(10, "urlName"));
-        assertThat(allOffers.get(1)).isEqualTo(new Offer(12, "urlName2"));
-        assertThat(allOffers.get(2)).isEqualTo(new Offer(15, "urlName3"));
-        assertThat(allOffers.get(3)).isEqualTo(new Offer(24, "urlName4"));
+        assertThat(allOffers.contains(new Offer(10, "urlName"))).isTrue();
+        assertThat(allOffers.contains(new Offer(12, "urlName2"))).isTrue();
+        assertThat(allOffers.contains(new Offer(15, "urlName3"))).isTrue();
+        assertThat(allOffers.contains(new Offer(24, "urlName4"))).isTrue();
+    }
 
+    @Test
+    public void should_not_return_all_offers() { // what we testing here??? -> test to change?
+        //given
+        List<Offer> listOffers = List.of(
+                new Offer(10, "urlName"),
+                new Offer(12, "urlName2"),
+                new Offer(15, "urlName3"),
+                new Offer(24, "urlName4")
+        );
+
+        //when
+        listOffers.forEach(offer -> offerFacade.saveOffer(offer));
+        Set<Offer> allOffers = offerFacade.findAllOffers();
+
+        //then
+        assertThat(allOffers.size()).isEqualTo(4);
+        assertThat(allOffers.contains(new Offer(16, "urlName3"))).isFalse();
     }
 
 }

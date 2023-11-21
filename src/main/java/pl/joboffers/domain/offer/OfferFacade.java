@@ -2,24 +2,29 @@ package pl.joboffers.domain.offer;
 
 import lombok.AllArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 public class OfferFacade {
 
     private final OfferRepository offerRepository;
 
-    public List<Offer> findAllOffers() {
-        return new ArrayList<>();
+    public Set<Offer> findAllOffers() {
+        return offerRepository.findAll();
     }
 
     public Offer findOfferById(Integer id) {
-        return new Offer(1, "url");
+        return offerRepository.findById(id);
     }
 
     public String saveOffer(Offer offer) {
-        return "success";
+        if (findOfferById(offer.getId()) == null) {
+            offerRepository.save(offer);
+            return "success";
+        } else {
+            return "offer exist in database";
+        }
     }
 
     public String fetchAllOffersAndSaveAllIfNotExists(List<Offer> offers) {
