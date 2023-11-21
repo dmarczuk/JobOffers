@@ -1,8 +1,7 @@
 package pl.joboffers.domain.offer;
 
-import org.springframework.stereotype.Repository;
 
-public interface OfferRepository extends Repository {
+interface OfferRepository {
 
     Offer save(Offer offer);
 
