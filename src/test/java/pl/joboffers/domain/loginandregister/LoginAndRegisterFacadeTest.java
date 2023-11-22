@@ -96,7 +96,7 @@ class LoginAndRegisterFacadeTest {
     }
 
     @Test
-    public void should_not_find_user_in_database () {
+    public void should_not_find_user_by_user_name_who_not_exist_in_database () {
         //given
         User user = new User("FirstUser", "pass", "email@com");
 
@@ -146,6 +146,11 @@ class LoginAndRegisterFacadeTest {
 
         //then
         assertThat(result).isEqualTo("Invalid username or password");
+
+    }
+
+    @Test
+    public void should_throw_exception_when_user_not_found() {
 
     }
 
