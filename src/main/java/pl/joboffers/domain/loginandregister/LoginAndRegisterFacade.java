@@ -11,30 +11,19 @@ public class LoginAndRegisterFacade {
 
     private final UserValidator userValidator;
     private final UserRepository userRepository;
-    //private List<User> listOfUsers;
-
-//    public LoginAndRegisterFacade(UserValidator userValidator) {
-//        this.userValidator = userValidator;
-//        this.listOfUsers = new ArrayList<>();
-//    }
 
     public RegistrationResultDto register(RegisterUserDto registerUserDto) {
-//        if(findByUsername(user.getUsername()) != null) {
-//            return "User exist in database";
-//        }
-        findByUsername(user.getUsername());
-        if(userValidator.hasCorrectAllArguments(user)) {
-            User savedUser = userRepository.save(user);  // new Record (5.04 6min)
-            //listOfUsers.add(user);
-            return "success";   // responseRegister dto (5.3 9min)
-        } else {
-            return "invalid arguments";
-        }
+        final User user = User.builder()
+                .username(registerUserDto.username())
+                .password(registerUserDto.password())
+                .build();
+        User savedUser = userRepository.save(user);
+        return new RegistrationResultDto(savedUser.id(), true, savedUser.username());
     }
 
     public String login(String username, String password) {
-        User user = findByUsername(username);
-        if (user != null && user.getPassword().equals(password)) {
+        UserDto userDto = findByUsername(username);
+        if (userDto != null && userDto.password().equals(password)) {
             return "Successful login";
         } else {
             return "Invalid username or password";
@@ -42,15 +31,8 @@ public class LoginAndRegisterFacade {
     }
 
     public UserDto findByUsername(String username) {
-        User user =  userRepository.findByUsername(username);
-        if (user != null) {
-            return user;
-        } else {
-            throw new UserNotFoundException("User not found in database");
-        }
-//                .filter(user -> user.getUsername().equals(username))
-//                .findAny()
-//                .orElse(null);
-        //return new User("username", "pass", "email");
+        return userRepository.findByUsername(username)
+                .map(user -> new UserDto(user.id(), user.username(), user.password(), user.email()))
+                .orElseThrow(() -> new UserNotFoundException("User not found in database"));
     }
 }
