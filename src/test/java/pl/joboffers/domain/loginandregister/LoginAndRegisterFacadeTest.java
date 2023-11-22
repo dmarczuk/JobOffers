@@ -82,7 +82,7 @@ class LoginAndRegisterFacadeTest {
     }
 
     @Test
-    public void should_find_user_by_user_name () {
+    public void should_find_user_by_user_name() {
         //given
         User user = new User("FirstUser", "pass", "email@com");
 
@@ -109,7 +109,7 @@ class LoginAndRegisterFacadeTest {
     }
 
     @Test
-    public void should_login_user_who_exist_in_database () {
+    public void should_login_user_when_exist_in_database () {
         //given
         User userInDatabase = new User("FirstUser", "pass", "email@com");
         loginAndRegisterFacade.register(userInDatabase);
@@ -123,7 +123,7 @@ class LoginAndRegisterFacadeTest {
     }
 
     @Test
-    public void should_not_login_new_user_because_user_not_exist_in_database () {
+    public void should_not_login_new_user_when_not_exist_in_database () {
         //given
         User user = new User("FirstUser", "pass", "email@com");
 
@@ -136,7 +136,7 @@ class LoginAndRegisterFacadeTest {
     }
 
     @Test
-    public void should_not_login_user_because_invalid_password () {
+    public void should_not_login_user_when_invalid_password () {
         //given
         User user = new User("FirstUser", "pass", "email@com");
         loginAndRegisterFacade.register(user);
