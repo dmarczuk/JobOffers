@@ -1,11 +1,10 @@
 package pl.joboffers.domain.loginandregister;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import pl.joboffers.domain.loginandregister.dto.RegisterUserDto;
+import pl.joboffers.domain.loginandregister.dto.RegistrationResultDto;
+import pl.joboffers.domain.loginandregister.dto.UserDto;
+import pl.joboffers.domain.loginandregister.exception.UserNotFoundException;
 
 @RequiredArgsConstructor
 public class LoginAndRegisterFacade {
@@ -19,10 +18,11 @@ public class LoginAndRegisterFacade {
 //        this.listOfUsers = new ArrayList<>();
 //    }
 
-    public String register(User user) {
-        if(findByUsername(user.getUsername()) != null) {
-            return "User exist in database";
-        }
+    public RegistrationResultDto register(RegisterUserDto registerUserDto) {
+//        if(findByUsername(user.getUsername()) != null) {
+//            return "User exist in database";
+//        }
+        findByUsername(user.getUsername());
         if(userValidator.hasCorrectAllArguments(user)) {
             User savedUser = userRepository.save(user);  // new Record (5.04 6min)
             //listOfUsers.add(user);
@@ -41,8 +41,13 @@ public class LoginAndRegisterFacade {
         }
     }
 
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public UserDto findByUsername(String username) {
+        User user =  userRepository.findByUsername(username);
+        if (user != null) {
+            return user;
+        } else {
+            throw new UserNotFoundException("User not found in database");
+        }
 //                .filter(user -> user.getUsername().equals(username))
 //                .findAny()
 //                .orElse(null);

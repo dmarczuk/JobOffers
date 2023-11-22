@@ -13,15 +13,15 @@ class UserValidator {
 
     }
 
-    private boolean hasCorrectUsername(String username) {
+    private boolean hasCorrectUsername(String username) {  //throw new UsernameInvalidException
         return !username.equals("");
     }
 
-    private boolean hasCorrectPassword(String password) {
+    private boolean hasCorrectPassword(String password) {  //throw new UsernameInvalidException
         return !password.equals("");
     }
 
-    private boolean hasCorrectEmail(String email) {
+    private boolean hasCorrectEmail(String email) {  //throw new UsernameInvalidException
         return !email.equals("");
     }
 
