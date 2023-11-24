@@ -6,6 +6,8 @@ import pl.joboffers.domain.loginandregister.dto.RegistrationResultDto;
 import pl.joboffers.domain.loginandregister.dto.UserDto;
 import pl.joboffers.domain.loginandregister.exception.UserNotFoundException;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 public class LoginAndRegisterFacade {
 
@@ -16,6 +18,7 @@ public class LoginAndRegisterFacade {
         final User user = User.builder()
                 .username(registerUserDto.username())
                 .password(registerUserDto.password())
+                .email(registerUserDto.email())
                 .build();
         User savedUser = userRepository.save(user);
         return new RegistrationResultDto(savedUser.id(), true, savedUser.username());
@@ -33,6 +36,6 @@ public class LoginAndRegisterFacade {
     public UserDto findByUsername(String username) {
         return userRepository.findByUsername(username)
                 .map(user -> new UserDto(user.id(), user.username(), user.password(), user.email()))
-                .orElseThrow(() -> new UserNotFoundException("User not found in database"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 }
