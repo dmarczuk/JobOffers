@@ -116,11 +116,53 @@ class OfferFacadeTest {
 
     @Test
     public void should_save_4_offers_when_there_are_no_offers_in_database() {
+        //given
+        Offer offer = new Offer(1, "url");
+        Offer offer2 = new Offer(2, "url2");
+        Offer offer3 = new Offer(3, "url3");
+        Offer offer4 = new Offer(4, "url4");
+
+        //when
+        String result = offerFacade.saveOffer(offer);
+        String result2 = offerFacade.saveOffer(offer2);
+        String result3 = offerFacade.saveOffer(offer3);
+        String result4 = offerFacade.saveOffer(offer4);
+
+        //then
+        assertThat(result).isEqualTo("success");
+        assertThat(result2).isEqualTo("success");
+        assertThat(result3).isEqualTo("success");
+        assertThat(result4).isEqualTo("success");
 
     }
 
     @Test
     public void should_save_only_2_offers_when_repository_had_4_added_with_offer_urls() {
+        //given
+        Offer offer = new Offer(1, "url");
+        Offer offer2 = new Offer(2, "url2");
+        Offer offer3 = new Offer(3, "url3");
+        Offer offer4 = new Offer(4, "url4");
+        String result = offerFacade.saveOffer(offer);
+        String result2 = offerFacade.saveOffer(offer2);
+        String result3 = offerFacade.saveOffer(offer3);
+        String result4 = offerFacade.saveOffer(offer4);
+        Offer offerToAdd1 = new Offer(1, "url");
+        Offer offerToAdd2 = new Offer(2, "url2");
+        Offer offerToAdd3 = new Offer(3, "url3");
+        Offer offerToAdd4 = new Offer(4, "url4");
+
+        //when
+        String result = offerFacade.saveOffer(offer);
+        String result2 = offerFacade.saveOffer(offer2);
+        String result3 = offerFacade.saveOffer(offer3);
+        String result4 = offerFacade.saveOffer(offer4);
+
+        //then
+        assertThat(result).isEqualTo("success");
+        assertThat(result2).isEqualTo("success");
+        assertThat(result3).isEqualTo("success");
+        assertThat(result4).isEqualTo("success");
 
     }
 

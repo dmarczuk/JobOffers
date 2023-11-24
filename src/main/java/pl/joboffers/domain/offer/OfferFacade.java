@@ -19,7 +19,8 @@ public class OfferFacade {
     }
 
     public String saveOffer(Offer offer) {
-        if (findOfferById(offer.getId()) == null) {
+
+        if (findOfferById(offer.id()) == null) {
             offerRepository.save(offer);
             return "success";
         } else {
