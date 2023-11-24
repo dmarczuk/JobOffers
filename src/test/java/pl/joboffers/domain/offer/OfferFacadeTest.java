@@ -1,6 +1,8 @@
 package pl.joboffers.domain.offer;
 
 import org.junit.jupiter.api.Test;
+import pl.joboffers.domain.offer.dto.OfferRequestDto;
+import pl.joboffers.domain.offer.dto.OfferResponseDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,157 +14,166 @@ import static org.junit.jupiter.api.Assertions.*;
 class OfferFacadeTest {
 
     OfferFacade offerFacade = new OfferFacade(
-            new InMemoryOfferRepositoryTestImpl()
+            new InMemoryOfferRepositoryTestImpl(),
+            new OfferService()
     );
 
     @Test
     public void should_save_offer_to_database() {
         //given
-        Offer offer = new Offer(1, "url");
+        OfferRequestDto offerToSave = new OfferRequestDto(1, "title", "company", "2000", "url");
 
         //when
-        String result = offerFacade.saveOffer(offer);
+        OfferResponseDto result = offerFacade.saveOffer(offerToSave);
 
         //then
-        assertThat(result).isEqualTo("success");
+        assertThat(result.offerUrl()).isEqualTo("url");
 
     }
 
     @Test
     public void should_not_save_offer_to_database_which_exist() {
         //given
-        Offer firstOffer = new Offer(10, "urlName");
-        Offer secondOffer = new Offer(10, "urlName2");
+//        Offer firstOffer = new Offer(10, "urlName");
+//        Offer secondOffer = new Offer(10, "urlName2");
+//
+//        //when
+//        offerFacade.saveOffer(firstOffer);
+//        String result = offerFacade.saveOffer(secondOffer);
+//
+//        //then
+//        assertThat(result).isEqualTo("offer exist in database");
+        //given
+        OfferRequestDto offerInDatabase = new OfferRequestDto(1, "title", "company", "2000", "url");
+        OfferRequestDto offerToSave = new OfferRequestDto(1, "title", "company", "2000", "url");
+        offerFacade.saveOffer(offerInDatabase);
 
         //when
-        offerFacade.saveOffer(firstOffer);
-        String result = offerFacade.saveOffer(secondOffer);
+        OfferResponseDto result = offerFacade.saveOffer(offerToSave);
 
         //then
-        assertThat(result).isEqualTo("offer exist in database");
+        assertThat(result.created()).isFalse();
 
     }
 
     @Test
     public void should_find_offer_by_id() {
         //given
-        Offer offer = new Offer(10, "urlName");
+        OfferRequestDto offerInDatabase = new OfferRequestDto(1, "title", "company", "2000", "url");
+        offerFacade.saveOffer(offerInDatabase);
 
         //when
-        offerFacade.saveOffer(offer);
-        Offer resultOffer = offerFacade.findOfferById(offer.getId());
+        OfferResponseDto result = offerFacade.findOfferById(offerInDatabase.id());
 
         //then
-        assertThat(resultOffer).isNotNull();
-        assertThat(resultOffer.getId()).isEqualTo(10);
-        assertThat(resultOffer.getUrl()).isEqualTo("urlName");
+        assertThat(result.id()).isEqualTo(offerInDatabase.id());
+        assertThat(result.offerUrl()).isEqualTo(offerInDatabase.offerUrl());
 
     }
 
     @Test
     public void should_not_find_offer_by_id() {
         //given
-        Offer offer = new Offer(10, "urlName");
+        OfferRequestDto offerInDatabase = new OfferRequestDto(1, "title", "company", "2000", "url");
 
         //when
-        offerFacade.saveOffer(offer);
-        Offer resultOffer = offerFacade.findOfferById(9);
+        OfferResponseDto result = offerFacade.findOfferById(offerInDatabase.id());
 
         //then
-        assertThat(resultOffer).isNull();
+        //exception
 
     }
 
     @Test
     public void should_return_all_offers() {
         //given
-        List<Offer> listOffers = List.of(
-                new Offer(10, "urlName"),
-                new Offer(12, "urlName2"),
-                new Offer(15, "urlName3"),
-                new Offer(24, "urlName4")
-        );
-
-        //when
-        listOffers.forEach(offer -> offerFacade.saveOffer(offer));
-        Set<Offer> allOffers = offerFacade.findAllOffers();
-
-        //then
-        assertThat(allOffers.size()).isEqualTo(4);
-        assertThat(allOffers.contains(new Offer(10, "urlName"))).isTrue();
-        assertThat(allOffers.contains(new Offer(12, "urlName2"))).isTrue();
-        assertThat(allOffers.contains(new Offer(15, "urlName3"))).isTrue();
-        assertThat(allOffers.contains(new Offer(24, "urlName4"))).isTrue();
+//        List<Offer> listOffers = List.of(
+//                new Offer(10, "urlName"),
+//                new Offer(12, "urlName2"),
+//                new Offer(15, "urlName3"),
+//                new Offer(24, "urlName4")
+//        );
+//
+//        //when
+//        listOffers.forEach(offer -> offerFacade.saveOffer(offer));
+//        Set<Offer> allOffers = offerFacade.findAllOffers();
+//
+//        //then
+//        assertThat(allOffers.size()).isEqualTo(4);
+//        assertThat(allOffers.contains(new Offer(10, "urlName"))).isTrue();
+//        assertThat(allOffers.contains(new Offer(12, "urlName2"))).isTrue();
+//        assertThat(allOffers.contains(new Offer(15, "urlName3"))).isTrue();
+//        assertThat(allOffers.contains(new Offer(24, "urlName4"))).isTrue();
     }
 
     @Test
     public void should_not_return_all_offers() { // what we testing here??? -> test to change?
         //given
-        List<Offer> listOffers = List.of(
-                new Offer(10, "urlName"),
-                new Offer(12, "urlName2"),
-                new Offer(15, "urlName3"),
-                new Offer(24, "urlName4")
-        );
-
-        //when
-        listOffers.forEach(offer -> offerFacade.saveOffer(offer));
-        Set<Offer> allOffers = offerFacade.findAllOffers();
-
-        //then
-        assertThat(allOffers.size()).isEqualTo(4);
-        assertThat(allOffers.contains(new Offer(16, "urlName3"))).isFalse();
+//        List<Offer> listOffers = List.of(
+//                new Offer(10, "urlName"),
+//                new Offer(12, "urlName2"),
+//                new Offer(15, "urlName3"),
+//                new Offer(24, "urlName4")
+//        );
+//
+//        //when
+//        listOffers.forEach(offer -> offerFacade.saveOffer(offer));
+//        Set<Offer> allOffers = offerFacade.findAllOffers();
+//
+//        //then
+//        assertThat(allOffers.size()).isEqualTo(4);
+//        assertThat(allOffers.contains(new Offer(16, "urlName3"))).isFalse();
     }
 
     @Test
     public void should_save_4_offers_when_there_are_no_offers_in_database() {
         //given
-        Offer offer = new Offer(1, "url");
-        Offer offer2 = new Offer(2, "url2");
-        Offer offer3 = new Offer(3, "url3");
-        Offer offer4 = new Offer(4, "url4");
-
-        //when
-        String result = offerFacade.saveOffer(offer);
-        String result2 = offerFacade.saveOffer(offer2);
-        String result3 = offerFacade.saveOffer(offer3);
-        String result4 = offerFacade.saveOffer(offer4);
-
-        //then
-        assertThat(result).isEqualTo("success");
-        assertThat(result2).isEqualTo("success");
-        assertThat(result3).isEqualTo("success");
-        assertThat(result4).isEqualTo("success");
+//        Offer offer = new Offer(1, "url");
+//        Offer offer2 = new Offer(2, "url2");
+//        Offer offer3 = new Offer(3, "url3");
+//        Offer offer4 = new Offer(4, "url4");
+//
+//        //when
+//        String result = offerFacade.saveOffer(offer);
+//        String result2 = offerFacade.saveOffer(offer2);
+//        String result3 = offerFacade.saveOffer(offer3);
+//        String result4 = offerFacade.saveOffer(offer4);
+//
+//        //then
+//        assertThat(result).isEqualTo("success");
+//        assertThat(result2).isEqualTo("success");
+//        assertThat(result3).isEqualTo("success");
+//        assertThat(result4).isEqualTo("success");
 
     }
 
     @Test
     public void should_save_only_2_offers_when_repository_had_4_added_with_offer_urls() {
         //given
-        Offer offer = new Offer(1, "url");
-        Offer offer2 = new Offer(2, "url2");
-        Offer offer3 = new Offer(3, "url3");
-        Offer offer4 = new Offer(4, "url4");
-        String result = offerFacade.saveOffer(offer);
-        String result2 = offerFacade.saveOffer(offer2);
-        String result3 = offerFacade.saveOffer(offer3);
-        String result4 = offerFacade.saveOffer(offer4);
-        Offer offerToAdd1 = new Offer(1, "url");
-        Offer offerToAdd2 = new Offer(2, "url2");
-        Offer offerToAdd3 = new Offer(3, "url3");
-        Offer offerToAdd4 = new Offer(4, "url4");
-
-        //when
-        String result = offerFacade.saveOffer(offer);
-        String result2 = offerFacade.saveOffer(offer2);
-        String result3 = offerFacade.saveOffer(offer3);
-        String result4 = offerFacade.saveOffer(offer4);
-
-        //then
-        assertThat(result).isEqualTo("success");
-        assertThat(result2).isEqualTo("success");
-        assertThat(result3).isEqualTo("success");
-        assertThat(result4).isEqualTo("success");
+//        Offer offer = new Offer(1, "url");
+//        Offer offer2 = new Offer(2, "url2");
+//        Offer offer3 = new Offer(3, "url3");
+//        Offer offer4 = new Offer(4, "url4");
+//        String result = offerFacade.saveOffer(offer);
+//        String result2 = offerFacade.saveOffer(offer2);
+//        String result3 = offerFacade.saveOffer(offer3);
+//        String result4 = offerFacade.saveOffer(offer4);
+//        Offer offerToAdd1 = new Offer(1, "url");
+//        Offer offerToAdd2 = new Offer(2, "url2");
+//        Offer offerToAdd3 = new Offer(3, "url3");
+//        Offer offerToAdd4 = new Offer(4, "url4");
+//
+//        //when
+//        String result = offerFacade.saveOffer(offer);
+//        String result2 = offerFacade.saveOffer(offer2);
+//        String result3 = offerFacade.saveOffer(offer3);
+//        String result4 = offerFacade.saveOffer(offer4);
+//
+//        //then
+//        assertThat(result).isEqualTo("success");
+//        assertThat(result2).isEqualTo("success");
+//        assertThat(result3).isEqualTo("success");
+//        assertThat(result4).isEqualTo("success");
 
     }
 

@@ -19,8 +19,8 @@ public class InMemoryOfferRepositoryTestImpl implements OfferRepository {
     }
 
     @Override
-    public Offer findById(Integer id) {
-        return inMemoryDatabase.get(id);
+    public Optional<Offer> findById(Integer id) {
+        return Optional.ofNullable(inMemoryDatabase.get(id));
     }
 
     @Override
