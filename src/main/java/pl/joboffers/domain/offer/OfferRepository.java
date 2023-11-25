@@ -8,7 +8,7 @@ interface OfferRepository {
 
     Offer save(Offer offer);
 
-    Optional<Offer> findById(Integer id);
+    Optional<Offer> findById(String id);
 
     Set<Offer> findAll();
 

@@ -1,6 +1,6 @@
 package pl.joboffers.domain.offer.dto;
 
-public record OfferRequestDto(Integer id,
+public record OfferRequestDto(String id,
                               String title,
                               String company,
                               String salary,

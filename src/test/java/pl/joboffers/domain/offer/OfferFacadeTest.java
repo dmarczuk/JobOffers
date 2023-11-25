@@ -1,15 +1,14 @@
 package pl.joboffers.domain.offer;
 
+import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.Test;
 import pl.joboffers.domain.offer.dto.OfferRequestDto;
 import pl.joboffers.domain.offer.dto.OfferResponseDto;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import pl.joboffers.domain.offer.exceptions.OfferNotFoundException;
+import pl.joboffers.domain.offer.exceptions.OfferUrlAlreadyExistException;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
 
 class OfferFacadeTest {
 
@@ -21,7 +20,7 @@ class OfferFacadeTest {
     @Test
     public void should_save_offer_to_database() {
         //given
-        OfferRequestDto offerToSave = new OfferRequestDto(1, "title", "company", "2000", "url");
+        OfferRequestDto offerToSave = new OfferRequestDto("1", "title", "company", "2000", "url");
 
         //when
         OfferResponseDto result = offerFacade.saveOffer(offerToSave);
@@ -34,32 +33,23 @@ class OfferFacadeTest {
     @Test
     public void should_not_save_offer_to_database_which_exist() {
         //given
-//        Offer firstOffer = new Offer(10, "urlName");
-//        Offer secondOffer = new Offer(10, "urlName2");
-//
-//        //when
-//        offerFacade.saveOffer(firstOffer);
-//        String result = offerFacade.saveOffer(secondOffer);
-//
-//        //then
-//        assertThat(result).isEqualTo("offer exist in database");
-        //given
-        OfferRequestDto offerInDatabase = new OfferRequestDto(1, "title", "company", "2000", "url");
-        OfferRequestDto offerToSave = new OfferRequestDto(1, "title", "company", "2000", "url");
+        OfferRequestDto offerInDatabase = new OfferRequestDto("1", "title", "company", "2000", "url");
+        OfferRequestDto offerToSave = new OfferRequestDto("1", "title", "company", "2000", "url");
         offerFacade.saveOffer(offerInDatabase);
 
         //when
-        OfferResponseDto result = offerFacade.saveOffer(offerToSave);
+        Throwable thrown = catchThrowable(() -> offerFacade.saveOffer(offerToSave));
 
         //then
-        assertThat(result.created()).isFalse();
-
+        AssertionsForClassTypes.assertThat(thrown)
+                .isInstanceOf(OfferUrlAlreadyExistException.class)
+                .hasMessage("Offer url already exist in database");
     }
 
     @Test
     public void should_find_offer_by_id() {
         //given
-        OfferRequestDto offerInDatabase = new OfferRequestDto(1, "title", "company", "2000", "url");
+        OfferRequestDto offerInDatabase = new OfferRequestDto("1", "title", "company", "2000", "url");
         offerFacade.saveOffer(offerInDatabase);
 
         //when
@@ -74,13 +64,16 @@ class OfferFacadeTest {
     @Test
     public void should_not_find_offer_by_id() {
         //given
-        OfferRequestDto offerInDatabase = new OfferRequestDto(1, "title", "company", "2000", "url");
+        OfferRequestDto offerInDatabase = new OfferRequestDto("1", "title", "company", "2000", "url");
 
         //when
-        OfferResponseDto result = offerFacade.findOfferById(offerInDatabase.id());
+        Throwable thrown = catchThrowable(() -> offerFacade.findOfferById(offerInDatabase.id()));
 
         //then
-        //exception
+        AssertionsForClassTypes.assertThat(thrown)
+                .isInstanceOf(OfferNotFoundException.class)
+                .hasMessage("Offer not found");
+
 
     }
 
