@@ -23,7 +23,7 @@ class OfferFacadeTest {
     @Test
     public void should_save_offer_to_database() {
         //given
-        OfferRequestDto offerToSave = new OfferRequestDto("1", "title", "company", "2000", "url");
+        OfferRequestDto offerToSave = new OfferRequestDto("company", "3000", "position", "url");
 
         //when
         OfferResponseDto result = offerFacade.saveOffer(offerToSave);
@@ -42,8 +42,8 @@ class OfferFacadeTest {
     @Test
     public void should_not_save_offer_to_database_which_exist() {
         //given
-        OfferRequestDto offerInDatabase = new OfferRequestDto("1", "title", "company", "2000", "url");
-        OfferRequestDto offerToSave = new OfferRequestDto("2", "title2", "company2", "3000", "url");
+        OfferRequestDto offerInDatabase = new OfferRequestDto("company", "3000", "position", "url");
+        OfferRequestDto offerToSave = new OfferRequestDto("company", "3000", "position", "url");
         offerFacade.saveOffer(offerInDatabase);
 
         //when
@@ -52,31 +52,31 @@ class OfferFacadeTest {
         //then
         AssertionsForClassTypes.assertThat(thrown)
                 .isInstanceOf(OfferDuplicateException.class)
-                .hasMessage("Offer url already exist in database");
+                .hasMessage("Offer url [" + offerToSave.offerUrl() + "] already exist in database");
     }
 
     @Test
     public void should_find_offer_by_id_when_offer_was_saved() {
         //given
-        OfferRequestDto offerInDatabase = new OfferRequestDto("1", "title", "company", "2000", "url");
-        offerFacade.saveOffer(offerInDatabase);
+        OfferRequestDto offerInDatabase = new OfferRequestDto("company", "3000", "position", "url");
+        OfferResponseDto savedOffer = offerFacade.saveOffer(offerInDatabase);
 
         //when
-        OfferResponseDto result = offerFacade.findOfferById(offerInDatabase.id());
+        OfferResponseDto result = offerFacade.findOfferById(savedOffer.id());
 
         //then
-        assertThat(result.id()).isEqualTo(offerInDatabase.id());
-        assertThat(result.offerUrl()).isEqualTo(offerInDatabase.offerUrl());
+        assertThat(result).isEqualTo(savedOffer);
 
     }
 
     @Test
     public void should_throw_not_found_exception_when_offer_not_found() {
         //given
-        OfferRequestDto offerInDatabase = new OfferRequestDto("1", "title", "company", "2000", "url");
+        OfferRequestDto offerInDatabase = new OfferRequestDto("company", "3000", "position", "url");
+        OfferResponseDto savedOffer = offerFacade.saveOffer(offerInDatabase);
 
         //when
-        Throwable thrown = catchThrowable(() -> offerFacade.findOfferById(offerInDatabase.id()));
+        Throwable thrown = catchThrowable(() -> offerFacade.findOfferById(savedOffer.id() + 1));
 
         //then
         AssertionsForClassTypes.assertThat(thrown)
@@ -88,10 +88,10 @@ class OfferFacadeTest {
     public void should_return_all_offers() {
         //given
         List<OfferRequestDto> listOffers = List.of(
-                new OfferRequestDto("10", "urlName", "company", "salary", "offerUrl"),
-                new OfferRequestDto("12", "urlName2", "company2", "salary2", "offerUrl2"),
-                new OfferRequestDto("15", "urlName3", "company3", "salary3", "offerUrl3"),
-                new OfferRequestDto("24", "urlName4", "company4", "salary4", "offerUrl4")
+                new OfferRequestDto("company", "3000", "position", "url"),
+                new OfferRequestDto("company", "3000", "position", "url2"),
+                new OfferRequestDto("company", "3000", "position", "url3"),
+                new OfferRequestDto("company", "3000", "position", "url4")
         );
 
         //when
@@ -101,10 +101,10 @@ class OfferFacadeTest {
         //then
         assertThat(allOffers.size()).isEqualTo(4);
         //how to better write it?
-        assertThat(allOffers.contains(new OfferResponseDto("10", true, "offerUrl"))).isTrue();
-        assertThat(allOffers.contains(new OfferResponseDto("12", true, "offerUrl2"))).isTrue();
-        assertThat(allOffers.contains(new OfferResponseDto("15", true, "offerUrl3"))).isTrue();
-        assertThat(allOffers.contains(new OfferResponseDto("24", true, "offerUrl4"))).isTrue();
+        assertThat(allOffers.contains(new OfferResponseDto("10", "company", "3000", "position", "url"))).isTrue();
+        assertThat(allOffers.contains(new OfferResponseDto("12", "company", "3000", "position", "url2"))).isTrue();
+        assertThat(allOffers.contains(new OfferResponseDto("15", "company", "3000", "position", "url3"))).isTrue();
+        assertThat(allOffers.contains(new OfferResponseDto("24", "company", "3000", "position", "url4"))).isTrue();
     }
 
     @Test

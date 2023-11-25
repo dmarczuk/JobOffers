@@ -1,5 +1,6 @@
 package pl.joboffers.domain.offer;
 
+import pl.joboffers.domain.offer.dto.OfferResponseDto;
 import pl.joboffers.domain.offer.exceptions.OfferDuplicateException;
 
 import java.util.*;
@@ -9,11 +10,16 @@ public class InMemoryOfferRepositoryTestImpl implements OfferRepository {
     Map<String, Offer> inMemoryDatabase = new ConcurrentHashMap<>();
     @Override
     public Offer save(Offer offer) {
-        if(inMemoryDatabase.containsKey(offer.id())) {
-            throw new OfferDuplicateException("Offer url already exist in database");
+        long count = inMemoryDatabase.values().stream()
+                .filter(offerInDatabase -> offerInDatabase.offerUrl().equals(offer.offerUrl()))
+                .count();
+        if(count != 0) {
+            throw new OfferDuplicateException("Offer url [" + offer.offerUrl() + "] already exist in database");
         } else {
-            inMemoryDatabase.put(offer.id(), offer);
-            return offer;
+            String id = UUID.randomUUID().toString();
+            Offer savedOffer = new Offer(id, offer.companyName(), offer.position(), offer.salary(), offer.offerUrl());
+            inMemoryDatabase.put(savedOffer.id(), savedOffer);
+            return savedOffer;
         }
     }
 
