@@ -8,7 +8,7 @@ import java.util.Objects;
 //@AllArgsConstructor
 @Builder
 record Offer(String id,
-              String title,
-              String company,
+              String companyName,
+              String position,
               String salary,
               String offerUrl) { }

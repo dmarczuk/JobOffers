@@ -1,17 +1,16 @@
 package pl.joboffers.domain.offer;
 
-import pl.joboffers.domain.offer.exceptions.OfferUrlAlreadyExistException;
+import pl.joboffers.domain.offer.exceptions.OfferDuplicateException;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 public class InMemoryOfferRepositoryTestImpl implements OfferRepository {
     Map<String, Offer> inMemoryDatabase = new ConcurrentHashMap<>();
     @Override
     public Offer save(Offer offer) {
         if(inMemoryDatabase.containsKey(offer.id())) {
-            throw new OfferUrlAlreadyExistException("Offer url already exist in database");
+            throw new OfferDuplicateException("Offer url already exist in database");
         } else {
             inMemoryDatabase.put(offer.id(), offer);
             return offer;

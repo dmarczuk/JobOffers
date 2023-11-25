@@ -18,30 +18,23 @@ public class OfferFacade {
     public Set<OfferResponseDto> findAllOffers() {
         return offerRepository.findAll()
                 .stream()
-                .map(offer -> new OfferResponseDto(offer.id(), true, offer.offerUrl()))
+                .map(OfferMapper::mapperOfferToOfferResponseDto)
                 .collect(Collectors.toSet());
     }
 
     public OfferResponseDto findOfferById(String id) {
         return offerRepository.findById(id)
-                .map(offer -> new OfferResponseDto(offer.id(), true, offer.offerUrl()))// add other parameters
+                .map(OfferMapper::mapperOfferToOfferResponseDto)
                 .orElseThrow(() -> new OfferNotFoundException("Offer not found"));
     }
 
     public OfferResponseDto saveOffer(OfferRequestDto offerRequestDto) {
-        final Offer offer = Offer.builder()
-                .id(offerRequestDto.id())
-                .title(offerRequestDto.title())
-                .company(offerRequestDto.company())
-                .salary(offerRequestDto.salary())
-                .offerUrl(offerRequestDto.offerUrl())
-                .build();
+        final Offer offer = OfferMapper.mapperOfferRequestDtoToOffer(offerRequestDto);
         Offer offerSaved = offerRepository.save(offer);
-        return new OfferResponseDto(offerSaved.id(), true, offerSaved.offerUrl());
+        return OfferMapper.mapperOfferToOfferResponseDto(offerSaved);
     }
 
     public Set<OfferResponseDto> fetchAllOffersAndSaveAllIfNotExists() {
-
         return new HashSet<>();
     }
 }

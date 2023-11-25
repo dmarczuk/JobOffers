@@ -5,7 +5,10 @@ import org.junit.jupiter.api.Test;
 import pl.joboffers.domain.offer.dto.OfferRequestDto;
 import pl.joboffers.domain.offer.dto.OfferResponseDto;
 import pl.joboffers.domain.offer.exceptions.OfferNotFoundException;
-import pl.joboffers.domain.offer.exceptions.OfferUrlAlreadyExistException;
+import pl.joboffers.domain.offer.exceptions.OfferDuplicateException;
+
+import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
@@ -31,10 +34,16 @@ class OfferFacadeTest {
     }
 
     @Test
+    public void should_throw_duplicate_key_exception_when_with_offer_url_exists() {
+        assertThat(false).isTrue();
+
+    }
+
+    @Test
     public void should_not_save_offer_to_database_which_exist() {
         //given
         OfferRequestDto offerInDatabase = new OfferRequestDto("1", "title", "company", "2000", "url");
-        OfferRequestDto offerToSave = new OfferRequestDto("1", "title", "company", "2000", "url");
+        OfferRequestDto offerToSave = new OfferRequestDto("2", "title2", "company2", "3000", "url");
         offerFacade.saveOffer(offerInDatabase);
 
         //when
@@ -42,12 +51,12 @@ class OfferFacadeTest {
 
         //then
         AssertionsForClassTypes.assertThat(thrown)
-                .isInstanceOf(OfferUrlAlreadyExistException.class)
+                .isInstanceOf(OfferDuplicateException.class)
                 .hasMessage("Offer url already exist in database");
     }
 
     @Test
-    public void should_find_offer_by_id() {
+    public void should_find_offer_by_id_when_offer_was_saved() {
         //given
         OfferRequestDto offerInDatabase = new OfferRequestDto("1", "title", "company", "2000", "url");
         offerFacade.saveOffer(offerInDatabase);
@@ -62,7 +71,7 @@ class OfferFacadeTest {
     }
 
     @Test
-    public void should_not_find_offer_by_id() {
+    public void should_throw_not_found_exception_when_offer_not_found() {
         //given
         OfferRequestDto offerInDatabase = new OfferRequestDto("1", "title", "company", "2000", "url");
 
@@ -73,53 +82,34 @@ class OfferFacadeTest {
         AssertionsForClassTypes.assertThat(thrown)
                 .isInstanceOf(OfferNotFoundException.class)
                 .hasMessage("Offer not found");
-
-
     }
 
     @Test
     public void should_return_all_offers() {
         //given
-//        List<Offer> listOffers = List.of(
-//                new Offer(10, "urlName"),
-//                new Offer(12, "urlName2"),
-//                new Offer(15, "urlName3"),
-//                new Offer(24, "urlName4")
-//        );
-//
-//        //when
-//        listOffers.forEach(offer -> offerFacade.saveOffer(offer));
-//        Set<Offer> allOffers = offerFacade.findAllOffers();
-//
-//        //then
-//        assertThat(allOffers.size()).isEqualTo(4);
-//        assertThat(allOffers.contains(new Offer(10, "urlName"))).isTrue();
-//        assertThat(allOffers.contains(new Offer(12, "urlName2"))).isTrue();
-//        assertThat(allOffers.contains(new Offer(15, "urlName3"))).isTrue();
-//        assertThat(allOffers.contains(new Offer(24, "urlName4"))).isTrue();
-    }
+        List<OfferRequestDto> listOffers = List.of(
+                new OfferRequestDto("10", "urlName", "company", "salary", "offerUrl"),
+                new OfferRequestDto("12", "urlName2", "company2", "salary2", "offerUrl2"),
+                new OfferRequestDto("15", "urlName3", "company3", "salary3", "offerUrl3"),
+                new OfferRequestDto("24", "urlName4", "company4", "salary4", "offerUrl4")
+        );
 
-    @Test
-    public void should_not_return_all_offers() { // what we testing here??? -> test to change?
-        //given
-//        List<Offer> listOffers = List.of(
-//                new Offer(10, "urlName"),
-//                new Offer(12, "urlName2"),
-//                new Offer(15, "urlName3"),
-//                new Offer(24, "urlName4")
-//        );
-//
-//        //when
-//        listOffers.forEach(offer -> offerFacade.saveOffer(offer));
-//        Set<Offer> allOffers = offerFacade.findAllOffers();
-//
-//        //then
-//        assertThat(allOffers.size()).isEqualTo(4);
-//        assertThat(allOffers.contains(new Offer(16, "urlName3"))).isFalse();
+        //when
+        listOffers.forEach(offer -> offerFacade.saveOffer(offer));
+        Set<OfferResponseDto> allOffers = offerFacade.findAllOffers();
+
+        //then
+        assertThat(allOffers.size()).isEqualTo(4);
+        //how to better write it?
+        assertThat(allOffers.contains(new OfferResponseDto("10", true, "offerUrl"))).isTrue();
+        assertThat(allOffers.contains(new OfferResponseDto("12", true, "offerUrl2"))).isTrue();
+        assertThat(allOffers.contains(new OfferResponseDto("15", true, "offerUrl3"))).isTrue();
+        assertThat(allOffers.contains(new OfferResponseDto("24", true, "offerUrl4"))).isTrue();
     }
 
     @Test
     public void should_save_4_offers_when_there_are_no_offers_in_database() {
+        assertThat(false).isTrue();
         //given
 //        Offer offer = new Offer(1, "url");
 //        Offer offer2 = new Offer(2, "url2");
@@ -142,6 +132,7 @@ class OfferFacadeTest {
 
     @Test
     public void should_save_only_2_offers_when_repository_had_4_added_with_offer_urls() {
+        assertThat(false).isTrue();
         //given
 //        Offer offer = new Offer(1, "url");
 //        Offer offer2 = new Offer(2, "url2");
@@ -171,23 +162,8 @@ class OfferFacadeTest {
     }
 
     @Test
-    public void should_throw_duplicate_key_exception_when_with_offer_url_exists() {
-
-    }
-
-    @Test
-    public void should_throw_not_found_exception_when_offer_not_found() {
-
-    }
-
-    @Test
     public void should_fetch_from_jobs_from_remote_and_save_all_offers_when_repository_is_empty() {
-
-    }
-
-    @Test
-    public void should_find_offer_by_id_when_offer_was_saved() {
-
+        assertThat(false).isTrue();
     }
 
 }
