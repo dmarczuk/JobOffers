@@ -35,6 +35,9 @@ public class OfferFacade {
     }
 
     public Set<OfferResponseDto> fetchAllOffersAndSaveAllIfNotExists() {
-        return new HashSet<>();
+        return offerService.fetchAllOffersAndSaveAllIfNotExists()
+                .stream()
+                .map(OfferMapper::mapperOfferToOfferResponseDto)
+                .collect(Collectors.toSet());
     }
 }

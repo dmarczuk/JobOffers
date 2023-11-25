@@ -5,6 +5,7 @@ import pl.joboffers.domain.offer.exceptions.OfferDuplicateException;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public class InMemoryOfferRepositoryTestImpl implements OfferRepository {
     Map<String, Offer> inMemoryDatabase = new ConcurrentHashMap<>();
@@ -21,6 +22,13 @@ public class InMemoryOfferRepositoryTestImpl implements OfferRepository {
             inMemoryDatabase.put(savedOffer.id(), savedOffer);
             return savedOffer;
         }
+    }
+
+    @Override
+    public Set<Offer> saveAll(Set<Offer> offers) {
+        return offers.stream()
+                .map(this::save)
+                .collect(Collectors.toSet());
     }
 
     @Override

@@ -8,6 +8,8 @@ interface OfferRepository {
 
     Offer save(Offer offer);
 
+    Set<Offer> saveAll(Set<Offer> offers);
+
     Optional<Offer> findById(String id);
 
     Set<Offer> findAll();

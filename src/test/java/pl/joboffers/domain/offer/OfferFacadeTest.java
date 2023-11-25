@@ -7,8 +7,10 @@ import pl.joboffers.domain.offer.dto.OfferResponseDto;
 import pl.joboffers.domain.offer.exceptions.OfferNotFoundException;
 import pl.joboffers.domain.offer.exceptions.OfferDuplicateException;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
@@ -35,12 +37,6 @@ class OfferFacadeTest {
 
     @Test
     public void should_throw_duplicate_key_exception_when_with_offer_url_exists() {
-        assertThat(false).isTrue();
-
-    }
-
-    @Test
-    public void should_not_save_offer_to_database_which_exist() {
         //given
         OfferRequestDto offerInDatabase = new OfferRequestDto("company", "3000", "position", "url");
         OfferRequestDto offerToSave = new OfferRequestDto("company", "3000", "position", "url");
@@ -87,6 +83,19 @@ class OfferFacadeTest {
     @Test
     public void should_return_all_offers() {
         //given
+        Set<OfferResponseDto> offersInDatabase = createDatabaseWith_4_Offers();
+
+        //when
+        Set<OfferResponseDto> allOffers = offerFacade.findAllOffers();
+
+        //then
+        assertThat(allOffers.size()).isEqualTo(4);
+        assertThat(allOffers.containsAll(offersInDatabase)).isTrue();
+    }
+
+    @Test
+    public void should_save_4_offers_when_there_are_no_offers_in_database() {
+        //given
         List<OfferRequestDto> listOffers = List.of(
                 new OfferRequestDto("company", "3000", "position", "url"),
                 new OfferRequestDto("company", "3000", "position", "url2"),
@@ -95,75 +104,61 @@ class OfferFacadeTest {
         );
 
         //when
-        listOffers.forEach(offer -> offerFacade.saveOffer(offer));
-        Set<OfferResponseDto> allOffers = offerFacade.findAllOffers();
+        Set<OfferResponseDto> savedOffers = listOffers.stream()
+                .map(offer -> offerFacade.saveOffer(offer))
+                .collect(Collectors.toSet());
 
         //then
-        assertThat(allOffers.size()).isEqualTo(4);
-        //how to better write it?
-        assertThat(allOffers.contains(new OfferResponseDto("10", "company", "3000", "position", "url"))).isTrue();
-        assertThat(allOffers.contains(new OfferResponseDto("12", "company", "3000", "position", "url2"))).isTrue();
-        assertThat(allOffers.contains(new OfferResponseDto("15", "company", "3000", "position", "url3"))).isTrue();
-        assertThat(allOffers.contains(new OfferResponseDto("24", "company", "3000", "position", "url4"))).isTrue();
-    }
-
-    @Test
-    public void should_save_4_offers_when_there_are_no_offers_in_database() {
-        assertThat(false).isTrue();
-        //given
-//        Offer offer = new Offer(1, "url");
-//        Offer offer2 = new Offer(2, "url2");
-//        Offer offer3 = new Offer(3, "url3");
-//        Offer offer4 = new Offer(4, "url4");
-//
-//        //when
-//        String result = offerFacade.saveOffer(offer);
-//        String result2 = offerFacade.saveOffer(offer2);
-//        String result3 = offerFacade.saveOffer(offer3);
-//        String result4 = offerFacade.saveOffer(offer4);
-//
-//        //then
-//        assertThat(result).isEqualTo("success");
-//        assertThat(result2).isEqualTo("success");
-//        assertThat(result3).isEqualTo("success");
-//        assertThat(result4).isEqualTo("success");
-
+        assertThat(savedOffers.size()).isEqualTo(4);
     }
 
     @Test
     public void should_save_only_2_offers_when_repository_had_4_added_with_offer_urls() {
-        assertThat(false).isTrue();
         //given
-//        Offer offer = new Offer(1, "url");
-//        Offer offer2 = new Offer(2, "url2");
-//        Offer offer3 = new Offer(3, "url3");
-//        Offer offer4 = new Offer(4, "url4");
-//        String result = offerFacade.saveOffer(offer);
-//        String result2 = offerFacade.saveOffer(offer2);
-//        String result3 = offerFacade.saveOffer(offer3);
-//        String result4 = offerFacade.saveOffer(offer4);
-//        Offer offerToAdd1 = new Offer(1, "url");
-//        Offer offerToAdd2 = new Offer(2, "url2");
-//        Offer offerToAdd3 = new Offer(3, "url3");
-//        Offer offerToAdd4 = new Offer(4, "url4");
-//
-//        //when
-//        String result = offerFacade.saveOffer(offer);
-//        String result2 = offerFacade.saveOffer(offer2);
-//        String result3 = offerFacade.saveOffer(offer3);
-//        String result4 = offerFacade.saveOffer(offer4);
-//
-//        //then
-//        assertThat(result).isEqualTo("success");
-//        assertThat(result2).isEqualTo("success");
-//        assertThat(result3).isEqualTo("success");
-//        assertThat(result4).isEqualTo("success");
+        Set<OfferResponseDto> offersInDatabase = createDatabaseWith_4_Offers();
+
+        List<OfferRequestDto> listOffersToSave = List.of(
+                new OfferRequestDto("company", "3000", "position", "url"),
+                new OfferRequestDto("company", "3000", "position", "url2"),
+                new OfferRequestDto("company", "3000", "position", "url3"),
+                new OfferRequestDto("company", "3000", "position", "url4"),
+                new OfferRequestDto("company", "3000", "position", "url5"),
+                new OfferRequestDto("company", "3000", "position", "url6")
+        );
+
+        //when
+        Set<OfferResponseDto> savedOffers = new HashSet<>();
+        try {
+            savedOffers = listOffersToSave.stream()
+                    .map(offer -> offerFacade.saveOffer(offer))
+                    .collect(Collectors.toSet());
+        } catch (OfferDuplicateException e) {
+
+        }
+
+        //then
+        assertThat(savedOffers.size()).isEqualTo(2);
+        assertThat(savedOffers.stream()
+                .filter(offer -> offer.offerUrl().equals("url5") || offer.offerUrl().equals("url6"))
+                .count()).isEqualTo(2);
 
     }
 
     @Test
     public void should_fetch_from_jobs_from_remote_and_save_all_offers_when_repository_is_empty() {
         assertThat(false).isTrue();
+    }
+
+    private Set<OfferResponseDto> createDatabaseWith_4_Offers() {
+        List<OfferRequestDto> listOffers = List.of(
+                new OfferRequestDto("company", "3000", "position", "url"),
+                new OfferRequestDto("company", "3000", "position", "url2"),
+                new OfferRequestDto("company", "3000", "position", "url3"),
+                new OfferRequestDto("company", "3000", "position", "url4")
+        );
+        return listOffers.stream()
+                .map(offer -> offerFacade.saveOffer(offer))
+                .collect(Collectors.toSet());
     }
 
 }
