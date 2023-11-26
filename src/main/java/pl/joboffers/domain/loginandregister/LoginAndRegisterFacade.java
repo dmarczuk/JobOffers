@@ -1,10 +1,11 @@
 package pl.joboffers.domain.loginandregister;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import pl.joboffers.domain.loginandregister.dto.RegisterUserDto;
+import pl.joboffers.domain.loginandregister.dto.RegistrationResultDto;
+import pl.joboffers.domain.loginandregister.dto.UserDto;
+import pl.joboffers.domain.loginandregister.exception.UserNotFoundException;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -12,40 +13,29 @@ public class LoginAndRegisterFacade {
 
     private final UserValidator userValidator;
     private final UserRepository userRepository;
-    //private List<User> listOfUsers;
 
-//    public LoginAndRegisterFacade(UserValidator userValidator) {
-//        this.userValidator = userValidator;
-//        this.listOfUsers = new ArrayList<>();
-//    }
-
-    public String register(User user) {
-        if(findByUsername(user.getUsername()) != null) {
-            return "User exist in database";
-        }
-        if(userValidator.hasCorrectAllArguments(user)) {
-            User savedUser = userRepository.save(user);  // new Record (5.04 6min)
-            //listOfUsers.add(user);
-            return "success";   // responseRegister dto (5.3 9min)
-        } else {
-            return "invalid arguments";
-        }
+    public RegistrationResultDto register(RegisterUserDto registerUserDto) {
+        final User user = User.builder()
+                .username(registerUserDto.username())
+                .password(registerUserDto.password())
+                .email(registerUserDto.email())
+                .build();
+        User savedUser = userRepository.save(user);
+        return new RegistrationResultDto(savedUser.id(), true, savedUser.username());
     }
 
     public String login(String username, String password) {
-        User user = findByUsername(username);
-        if (user != null && user.getPassword().equals(password)) {
+        UserDto userDto = findByUsername(username);
+        if (userDto != null && userDto.password().equals(password)) {
             return "Successful login";
         } else {
             return "Invalid username or password";
         }
     }
 
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
-//                .filter(user -> user.getUsername().equals(username))
-//                .findAny()
-//                .orElse(null);
-        //return new User("username", "pass", "email");
+    public UserDto findByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .map(user -> new UserDto(user.id(), user.username(), user.password(), user.email()))
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 }
