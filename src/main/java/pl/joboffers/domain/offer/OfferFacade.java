@@ -1,33 +1,43 @@
 package pl.joboffers.domain.offer;
 
 import lombok.AllArgsConstructor;
+import pl.joboffers.domain.offer.dto.OfferRequestDto;
+import pl.joboffers.domain.offer.dto.OfferResponseDto;
+import pl.joboffers.domain.offer.exceptions.OfferNotFoundException;
 
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 public class OfferFacade {
 
     private final OfferRepository offerRepository;
+    private final OfferService offerService;
 
-    public Set<Offer> findAllOffers() {
-        return offerRepository.findAll();
+    public Set<OfferResponseDto> findAllOffers() {
+        return offerRepository.findAll()
+                .stream()
+                .map(OfferMapper::mapperOfferToOfferResponseDto)
+                .collect(Collectors.toSet());
     }
 
-    public Offer findOfferById(Integer id) {
-        return offerRepository.findById(id);
+    public OfferResponseDto findOfferById(String id) {
+        return offerRepository.findById(id)
+                .map(OfferMapper::mapperOfferToOfferResponseDto)
+                .orElseThrow(() -> new OfferNotFoundException("Offer not found"));
     }
 
-    public String saveOffer(Offer offer) {
-        if (findOfferById(offer.getId()) == null) {
-            offerRepository.save(offer);
-            return "success";
-        } else {
-            return "offer exist in database";
-        }
+    public OfferResponseDto saveOffer(OfferRequestDto offerRequestDto) {
+        final Offer offer = OfferMapper.mapperOfferRequestDtoToOffer(offerRequestDto);
+        Offer offerSaved = offerRepository.save(offer);
+        return OfferMapper.mapperOfferToOfferResponseDto(offerSaved);
     }
 
-    public String fetchAllOffersAndSaveAllIfNotExists(List<Offer> offers) {
-        return "success";
+    public Set<OfferResponseDto> fetchAllOffersAndSaveAllIfNotExists() {
+        return offerService.fetchAllOffersAndSaveAllIfNotExists()
+                .stream()
+                .map(OfferMapper::mapperOfferToOfferResponseDto)
+                .collect(Collectors.toSet());
     }
 }
