@@ -17,10 +17,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
 
 class OfferFacadeTest {
 
-    OfferFacade offerFacade = new OfferFacade(
-            new InMemoryOfferRepositoryTestImpl(),
-            new OfferService()
-    );
+    OfferFacade offerFacade = CreatorOfferFacadeTestImpl.createOfferFacadeForTest();
 
     @Test
     public void should_save_offer_to_database() {
@@ -83,7 +80,7 @@ class OfferFacadeTest {
     @Test
     public void should_return_all_offers() {
         //given
-        Set<OfferResponseDto> offersInDatabase = createDatabaseWith_4_Offers();
+        Set<OfferResponseDto> offersInDatabase = CreatorOfferFacadeTestImpl.createDatabaseWith_4_Offers(offerFacade);
 
         //when
         Set<OfferResponseDto> allOffers = offerFacade.findAllOffers();
@@ -115,50 +112,47 @@ class OfferFacadeTest {
     @Test
     public void should_save_only_2_offers_when_repository_had_4_added_with_offer_urls() {
         //given
-        Set<OfferResponseDto> offersInDatabase = createDatabaseWith_4_Offers();
+        CreatorOfferFacadeTestImpl.createDatabaseWith_4_Offers(offerFacade);
 
-        List<OfferRequestDto> listOffersToSave = List.of(
-                new OfferRequestDto("company", "3000", "position", "url"),
-                new OfferRequestDto("company", "3000", "position", "url2"),
-                new OfferRequestDto("company", "3000", "position", "url3"),
-                new OfferRequestDto("company", "3000", "position", "url4"),
-                new OfferRequestDto("company", "3000", "position", "url5"),
-                new OfferRequestDto("company", "3000", "position", "url6")
-        );
+//        List.of(
+//                        new JobOfferResponse("companyName1", "postion1", "2000", "url1"),
+//                        new JobOfferResponse("companyName2", "postion2", "2000", "url2"),
+//                        new JobOfferResponse("companyName3", "postion3", "2000", "url3"),
+//                        new JobOfferResponse("companyName4", "postion4", "2000", "url4"),
+//                        new JobOfferResponse("Comarch", "junior", "4000", "http://comarchOffer.pl"),
+//                        new JobOfferResponse("Motorola", "mid", "7000", "http://motorolaOffer.pl")
+//                )
 
         //when
-        Set<OfferResponseDto> savedOffers = new HashSet<>();
-        try {
-            savedOffers = listOffersToSave.stream()
-                    .map(offer -> offerFacade.saveOffer(offer))
-                    .collect(Collectors.toSet());
-        } catch (OfferDuplicateException e) {
-
-        }
+        Set<OfferResponseDto> savedOffers = offerFacade.fetchAllOffersAndSaveAllIfNotExists();
 
         //then
         assertThat(savedOffers.size()).isEqualTo(2);
         assertThat(savedOffers.stream()
-                .filter(offer -> offer.offerUrl().equals("url5") || offer.offerUrl().equals("url6"))
+                .filter(offer -> offer.offerUrl().equals("http://comarchOffer.pl") || offer.offerUrl().equals("http://motorolaOffer.pl"))
                 .count()).isEqualTo(2);
 
     }
 
     @Test
     public void should_fetch_from_jobs_from_remote_and_save_all_offers_when_repository_is_empty() {
-        assertThat(false).isTrue();
+        //given
+
+//        List.of(
+//                        new JobOfferResponse("companyName1", "postion1", "2000", "url1"),
+//                        new JobOfferResponse("companyName2", "postion2", "2000", "url2"),
+//                        new JobOfferResponse("companyName3", "postion3", "2000", "url3"),
+//                        new JobOfferResponse("companyName4", "postion4", "2000", "url4"),
+//                        new JobOfferResponse("Comarch", "junior", "4000", "http://comarchOffer.pl"),
+//                        new JobOfferResponse("Motorola", "mid", "7000", "http://motorolaOffer.pl")
+//                )
+
+        //when
+        Set<OfferResponseDto> savedOffers = offerFacade.fetchAllOffersAndSaveAllIfNotExists();
+
+        //then
+        assertThat(savedOffers.size()).isEqualTo(6);
     }
 
-    private Set<OfferResponseDto> createDatabaseWith_4_Offers() {
-        List<OfferRequestDto> listOffers = List.of(
-                new OfferRequestDto("company", "3000", "position", "url"),
-                new OfferRequestDto("company", "3000", "position", "url2"),
-                new OfferRequestDto("company", "3000", "position", "url3"),
-                new OfferRequestDto("company", "3000", "position", "url4")
-        );
-        return listOffers.stream()
-                .map(offer -> offerFacade.saveOffer(offer))
-                .collect(Collectors.toSet());
-    }
 
 }
