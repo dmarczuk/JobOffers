@@ -138,15 +138,6 @@ class OfferFacadeTest {
     public void should_fetch_from_jobs_from_remote_and_save_all_offers_when_repository_is_empty() {
         //given
 
-//        List.of(
-//                        new JobOfferResponse("companyName1", "postion1", "2000", "url1"),
-//                        new JobOfferResponse("companyName2", "postion2", "2000", "url2"),
-//                        new JobOfferResponse("companyName3", "postion3", "2000", "url3"),
-//                        new JobOfferResponse("companyName4", "postion4", "2000", "url4"),
-//                        new JobOfferResponse("Comarch", "junior", "4000", "http://comarchOffer.pl"),
-//                        new JobOfferResponse("Motorola", "mid", "7000", "http://motorolaOffer.pl")
-//                )
-
         //when
         Set<OfferResponseDto> savedOffers = offerFacade.fetchAllOffersAndSaveAllIfNotExists();
 
