@@ -14,4 +14,6 @@ interface OfferRepository {
 
     Set<Offer> findAll();
 
+    boolean offerExist(Offer offer);
+
 }

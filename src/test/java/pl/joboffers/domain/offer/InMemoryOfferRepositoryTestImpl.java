@@ -11,10 +11,7 @@ public class InMemoryOfferRepositoryTestImpl implements OfferRepository {
     Map<String, Offer> inMemoryDatabase = new ConcurrentHashMap<>();
     @Override
     public Offer save(Offer offer) {
-        long count = inMemoryDatabase.values().stream()
-                .filter(offerInDatabase -> offerInDatabase.offerUrl().equals(offer.offerUrl()))
-                .count();
-        if(count != 0) {
+        if(offerExist(offer)) {
             throw new OfferDuplicateException("Offer url [" + offer.offerUrl() + "] already exist in database");
         } else {
             String id = UUID.randomUUID().toString();
@@ -39,5 +36,11 @@ public class InMemoryOfferRepositoryTestImpl implements OfferRepository {
     @Override
     public Set<Offer> findAll() {
         return new HashSet<>(inMemoryDatabase.values());
+    }
+
+    @Override
+    public boolean offerExist(Offer offer) {
+        return inMemoryDatabase.values().stream()
+                .anyMatch(offerInDatabase -> offer.offerUrl().equals(offerInDatabase.offerUrl()));
     }
 }
