@@ -14,13 +14,15 @@ import pl.joboffers.domain.offer.dto.JobOfferResponse;
 import java.util.Set;
 
 @AllArgsConstructor
-@Component
 public class OfferFetcherRestTemplate implements OfferFetchable {
 
     private final RestTemplate restTemplate;
+    private final String uri;
+    private final int port;
     @Override
     public Set<JobOfferResponse> fetchOffers() {
-        String url = "http://ec2-3-120-147-150.eu-central-1.compute.amazonaws.com:5057/offers";
+//        String url = "http://ec2-3-120-147-150.eu-central-1.compute.amazonaws.com:5057/offers";
+        String url = getUrlForService("/offers");
         HttpHeaders headers = new HttpHeaders();
         final HttpEntity<HttpHeaders> requestEntity = new HttpEntity<>(headers);
         ResponseEntity<Set<JobOfferResponse>> response = restTemplate.exchange(
@@ -30,5 +32,9 @@ public class OfferFetcherRestTemplate implements OfferFetchable {
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();
+    }
+
+    private String getUrlForService(String service) {
+        return uri + ":" + port + service;
     }
 }

@@ -4,6 +4,8 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
+import pl.joboffers.domain.offer.OfferFetchable;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.time.Duration;
 
@@ -24,8 +26,12 @@ public class OfferFetcherClientConfig {
                 .build();
     }
 
-//    @Bean
-//    public Random....
+    @Bean
+    public OfferFetchable remoteOfferFetcherClient(RestTemplate restTemplate,
+                                                   @Value("${joboffers.offer.http.client.config.uri:http://example.com}") String uri,
+                                                   @Value("${joboffers.offer.http.client.config.port:5057}") int port) {
+        return new OfferFetcherRestTemplate(restTemplate, uri, port);
+    }
 
 
 }
