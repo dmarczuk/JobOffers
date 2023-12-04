@@ -2,8 +2,11 @@ package pl.joboffers;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import pl.joboffers.infrastructure.offer.http.OfferFetcherRestTemplateConfigurationProperties;
 
 @SpringBootApplication
+@EnableConfigurationProperties(OfferFetcherRestTemplateConfigurationProperties.class)
 public class JobOffersApplication {
 
     public static void main(String[] args) {

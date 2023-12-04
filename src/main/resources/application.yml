@@ -10,3 +10,5 @@ joboffers:
         config:
           uri: http://ec2-3-120-147-150.eu-central-1.compute.amazonaws.com:5057/offers
           port: 5057
+          connectTimeout: 5000
+          readTimeout: 5000
