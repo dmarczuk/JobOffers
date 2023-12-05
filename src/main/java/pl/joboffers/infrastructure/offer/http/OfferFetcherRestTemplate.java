@@ -24,6 +24,7 @@ public class OfferFetcherRestTemplate implements OfferFetchable {
 //        String url = "http://ec2-3-120-147-150.eu-central-1.compute.amazonaws.com:5057/offers";
         String url = getUrlForService("/offers");
         HttpHeaders headers = new HttpHeaders();
+        // to do: refactor (add try catch)
         final HttpEntity<HttpHeaders> requestEntity = new HttpEntity<>(headers);
         ResponseEntity<Set<JobOfferResponse>> response = restTemplate.exchange(
                 url,
