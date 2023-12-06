@@ -16,9 +16,8 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
-
-@ActiveProfiles("integration")
 @SpringBootTest(classes = JobOffersApplication.class)
+@ActiveProfiles("integration")
 @AutoConfigureMockMvc
 @Testcontainers
 public class BaseIntegrationTest {
@@ -44,6 +43,7 @@ public class BaseIntegrationTest {
         registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
         registry.add("joboffers.offer.http.client.config.port", () -> wireMockServer.getPort());
         registry.add("joboffers.offer.http.client.config.uri", () -> "http://localhost");
+        //registry.add("joboffers.offer.cron", () -> "* * */3 * * *"); jak ustawić w application-integration ?
     }
 
 }

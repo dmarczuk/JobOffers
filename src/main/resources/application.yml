@@ -5,6 +5,7 @@ spring:
 
 joboffers:
   offer:
+    cron: "* * */3 * * *"
     http:
       client:
         config:

@@ -1,3 +1,7 @@
+joboffers:
+  offer:
+    cron: "* * */3 * * *"
+
 #spring:
 #  data:
 #    mongodb:
