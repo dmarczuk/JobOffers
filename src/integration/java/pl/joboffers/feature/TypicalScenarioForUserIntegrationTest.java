@@ -4,20 +4,25 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import org.awaitility.Awaitility;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.http.HttpStatus;
 import pl.joboffers.BaseIntegrationTest;
 import pl.joboffers.domain.offer.OfferFetchable;
 import pl.joboffers.domain.offer.dto.JobOfferResponse;
+import pl.joboffers.infrastructure.offer.scheduler.OfferFetcherScheduler;
 
 import java.time.Duration;
 import java.util.Set;
 
 import static org.awaitility.Awaitility.*;
 
+//@EnableConfigurationProperties
 public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
     OfferFetchable offerFetchable;
+    OfferFetcherScheduler scheduler;
 
     @Test
     public void should_user_go_by_whole_path() { //?? name of test ??????
@@ -46,7 +51,7 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
 //                )
                 ));
         //when
-        Set<JobOfferResponse> jobOfferResponses = offerFetchable.fetchOffers();
+        //Set<JobOfferResponse> jobOfferResponses = offerFetchable.fetchOffers();
 
         //then
 
@@ -54,7 +59,7 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
         //given
 
         //when
-
+        scheduler.fetchOffers();
 //        await()
 //                .atMost(Duration.ofSeconds(20))
 //                .pollInterval(Duration.ofSeconds(5))

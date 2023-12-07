@@ -1,6 +1,6 @@
 joboffers:
   offer:
-    cron: "* * */3 * * *"
+    delayTime: "*/1 * * * * *"
 
 #spring:
 #  data:

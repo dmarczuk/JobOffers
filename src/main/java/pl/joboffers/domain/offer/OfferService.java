@@ -1,6 +1,9 @@
 package pl.joboffers.domain.offer;
 
 import lombok.AllArgsConstructor;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import pl.joboffers.domain.offer.exceptions.OfferDuplicateException;
 import pl.joboffers.domain.offer.exceptions.SaveOfferException;
 

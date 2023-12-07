@@ -14,7 +14,7 @@ public class OfferFetcherScheduler {
 
     private final OfferFacade offerFacade;
    // private final SchedulerConfigurationProperties properties;
-    @Scheduled(cron = "${joboffers.offer.cron}")
+    @Scheduled(cron = "${joboffers.offer.delayTime}")
     public void fetchOffers() {
         log.info("scheduler started");
         offerFacade.fetchAllOffersAndSaveAllIfNotExists();
