@@ -22,6 +22,8 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
     OfferFetchable offerFetchable;
+
+    @Autowired
     OfferFetcherScheduler scheduler;
 
     @Test

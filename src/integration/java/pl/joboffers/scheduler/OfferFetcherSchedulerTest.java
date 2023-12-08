@@ -1,8 +1,10 @@
 package pl.joboffers.scheduler;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import pl.joboffers.BaseIntegrationTest;
+import pl.joboffers.JobOffersApplication;
 import pl.joboffers.domain.offer.OfferFetchable;
 
 import java.time.Duration;
@@ -10,6 +12,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.times;
 import static org.awaitility.Awaitility.await;
 
+@SpringBootTest(classes = JobOffersApplication.class, properties = "scheduling.enabled=true")
 public class OfferFetcherSchedulerTest extends BaseIntegrationTest {
 
     @SpyBean

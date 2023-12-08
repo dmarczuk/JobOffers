@@ -13,3 +13,6 @@ joboffers:
           port: 5057
           connectTimeout: 5000
           readTimeout: 5000
+
+scheduling:
+  enabled: true

@@ -8,7 +8,6 @@ import pl.joboffers.infrastructure.offer.http.OfferFetcherRestTemplateConfigurat
 
 @SpringBootApplication
 @EnableConfigurationProperties(OfferFetcherRestTemplateConfigurationProperties.class)
-@EnableScheduling
 public class JobOffersApplication {
 
     public static void main(String[] args) {
