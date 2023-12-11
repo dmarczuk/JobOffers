@@ -3,6 +3,8 @@ joboffers:
     scheduler:
       delayTime: "*/1 * * * * *"
 
+scheduling:
+  enabled: false
 #spring:
 #  data:
 #    mongodb:

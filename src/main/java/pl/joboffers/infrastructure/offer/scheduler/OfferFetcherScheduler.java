@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import pl.joboffers.domain.offer.OfferFacade;
-fimport pl.joboffers.domain.offer.dto.OfferResponseDto;
+import pl.joboffers.domain.offer.dto.OfferResponseDto;
 
 import java.util.Set;
 
