@@ -3,6 +3,7 @@ package pl.joboffers.domain.offer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 
@@ -19,7 +20,7 @@ public class OfferFacadeConfiguration {
 
             @Override
             public Set<Offer> saveAll(Set<Offer> offers) {
-                return null;
+                return Collections.emptySet();
             }
 
             @Override
@@ -37,6 +38,7 @@ public class OfferFacadeConfiguration {
                 return false;
             }
         };
+
         OfferService offerService = new OfferService(offerFetchable, repository);
         return new OfferFacade(repository, offerService);
     }

@@ -35,22 +35,7 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
                 .willReturn(WireMock.aResponse()
                         .withStatus(HttpStatus.OK.value())
                         .withHeader("Content-Type", "application/json")
-                        .withBody("[]")
-//                        .withBody("""
-//                        [
-//                            {
-//                                "title": "Junior Java Developer",
-//                                "company": "BlueSoft Sp. z o.o.",
-//                                "salary": "7 000 – 9 000 PLN",
-//                                "offerUrl": "https://nofluffjobs.com/pl/job/junior-java-developer-bluesoft-remote-hfuanrre"
-//                            },
-//                            {
-//                                 "title": "Java (CMS) Developer",
-//                                 "company": "Efigence SA",
-//                                 "salary": "16 000 – 18 000 PLN",
-//                                 "offerUrl": "https://nofluffjobs.com/pl/job/java-cms-developer-efigence-warszawa-b4qs8loh"
-//                            }]""".trim()
-//                )
+                        .withBody(giveTwoOffers())
                 ));
         //when
         //Set<JobOfferResponse> jobOfferResponses = offerFetchable.fetchOffers();
@@ -62,13 +47,6 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
 
         //when
         scheduler.fetchOffers();
-//        await()
-//                .atMost(Duration.ofSeconds(20))
-//                .pollInterval(Duration.ofSeconds(5))
-//                .until(
-//                        () -> true
-//                );
-
 
         //then
 
@@ -88,5 +66,26 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
 //      step 15: user made GET /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and system returned OK(200) with 4 offers with ids: 1000,2000, 3000 and 4000
 
 
+    }
+
+    private String giveZeroOffer() {
+        return "[]";
+    }
+
+    private String giveTwoOffers() {
+        return """
+                  [
+                      {
+                          "title": "Junior Java Developer",
+                          "company": "BlueSoft Sp. z o.o.",
+                          "salary": "7 000 – 9 000 PLN",
+                          "offerUrl": "https://nofluffjobs.com/pl/job/junior-java-developer-bluesoft-remote-hfuanrre"
+                     },
+                     {
+                          "title": "Java (CMS) Developer",
+                          "company": "Efigence SA",
+                          "salary": "16 000 – 18 000 PLN",
+                          "offerUrl": "https://nofluffjobs.com/pl/job/java-cms-developer-efigence-warszawa-b4qs8loh"
+                     }]""".trim();
     }
 }

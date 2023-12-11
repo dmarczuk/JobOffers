@@ -6,6 +6,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import pl.joboffers.domain.offer.OfferFacade;
+fimport pl.joboffers.domain.offer.dto.OfferResponseDto;
+
+import java.util.Set;
 
 @Component
 @AllArgsConstructor
@@ -13,10 +16,9 @@ import pl.joboffers.domain.offer.OfferFacade;
 public class OfferFetcherScheduler {
 
     private final OfferFacade offerFacade;
-   // private final SchedulerConfigurationProperties properties;
-    @Scheduled(cron = "${joboffers.offer.delayTime}")
-    public void fetchOffers() {
+    @Scheduled(cron = "${joboffers.offer.scheduler.delayTime}")
+    public Set<OfferResponseDto> fetchOffers() {
         log.info("scheduler started");
-        offerFacade.fetchAllOffersAndSaveAllIfNotExists();
+        return offerFacade.fetchAllOffersAndSaveAllIfNotExists();
     }
 }

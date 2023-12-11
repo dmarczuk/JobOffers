@@ -18,9 +18,9 @@ class OfferService {
 
     public Set<Offer> fetchAllOffersAndSaveAllIfNotExists() { //method to fetch offers from server
         Set<Offer> jobOffers = fetchOffers();
-        Set<Offer> offerToSave = filterNonExistingOffer(jobOffers);
+       // Set<Offer> offerToSave = filterNonExistingOffer(jobOffers);
         try {
-            return offerRepository.saveAll(offerToSave);
+            return offerRepository.saveAll(jobOffers);
         } catch (OfferDuplicateException duplicateException) {
             throw new SaveOfferException(duplicateException.getMessage()); // add jobOffers to argument
         }

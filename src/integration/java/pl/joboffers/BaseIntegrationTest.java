@@ -43,7 +43,6 @@ public class BaseIntegrationTest {
         registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
         registry.add("joboffers.offer.http.client.config.port", () -> wireMockServer.getPort());
         registry.add("joboffers.offer.http.client.config.uri", () -> "http://localhost");
-        //registry.add("joboffers.offer.cron", () -> "* * */3 * * *"); jak ustawić w application-integration ?
     }
 
 }

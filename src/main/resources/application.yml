@@ -5,7 +5,8 @@ spring:
 
 joboffers:
   offer:
-    delayTime: "*/10 * * * * *"
+    scheduler:
+      delayTime: "*/10 * * * * *"
     http:
       client:
         config:

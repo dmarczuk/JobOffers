@@ -1,6 +1,7 @@
 joboffers:
   offer:
-    delayTime: "*/1 * * * * *"
+    scheduler:
+      delayTime: "*/1 * * * * *"
 
 #spring:
 #  data:
