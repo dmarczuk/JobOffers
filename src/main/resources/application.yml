@@ -5,10 +5,15 @@ spring:
 
 joboffers:
   offer:
+    scheduler:
+      delayTime: "*/10 * * * * *"
     http:
       client:
         config:
-          uri: http://ec2-3-120-147-150.eu-central-1.compute.amazonaws.com:5057/offers
+          uri: http://ec2-3-120-147-150.eu-central-1.compute.amazonaws.com
           port: 5057
           connectTimeout: 5000
           readTimeout: 5000
+
+scheduling:
+  enabled: true

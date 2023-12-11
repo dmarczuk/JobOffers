@@ -1,6 +1,9 @@
 package pl.joboffers.domain.offer;
 
 import lombok.AllArgsConstructor;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import pl.joboffers.domain.offer.exceptions.OfferDuplicateException;
 import pl.joboffers.domain.offer.exceptions.SaveOfferException;
 
@@ -15,9 +18,9 @@ class OfferService {
 
     public Set<Offer> fetchAllOffersAndSaveAllIfNotExists() { //method to fetch offers from server
         Set<Offer> jobOffers = fetchOffers();
-        Set<Offer> offerToSave = filterNonExistingOffer(jobOffers);
+       // Set<Offer> offerToSave = filterNonExistingOffer(jobOffers);
         try {
-            return offerRepository.saveAll(offerToSave);
+            return offerRepository.saveAll(jobOffers);
         } catch (OfferDuplicateException duplicateException) {
             throw new SaveOfferException(duplicateException.getMessage()); // add jobOffers to argument
         }

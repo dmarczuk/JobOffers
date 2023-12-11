@@ -1,19 +1,30 @@
 package pl.joboffers.feature;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
+import org.awaitility.Awaitility;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.http.HttpStatus;
 import pl.joboffers.BaseIntegrationTest;
 import pl.joboffers.domain.offer.OfferFetchable;
 import pl.joboffers.domain.offer.dto.JobOfferResponse;
+import pl.joboffers.infrastructure.offer.scheduler.OfferFetcherScheduler;
 
+import java.time.Duration;
 import java.util.Set;
 
+import static org.awaitility.Awaitility.*;
+
+//@EnableConfigurationProperties
 public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
     OfferFetchable offerFetchable;
+
+    @Autowired
+    OfferFetcherScheduler scheduler;
 
     @Test
     public void should_user_go_by_whole_path() { //?? name of test ??????
@@ -24,29 +35,22 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
                 .willReturn(WireMock.aResponse()
                         .withStatus(HttpStatus.OK.value())
                         .withHeader("Content-Type", "application/json")
-                        .withBody("[]")
-//                        .withBody("""
-//                        [
-//                            {
-//                                "title": "Junior Java Developer",
-//                                "company": "BlueSoft Sp. z o.o.",
-//                                "salary": "7 000 – 9 000 PLN",
-//                                "offerUrl": "https://nofluffjobs.com/pl/job/junior-java-developer-bluesoft-remote-hfuanrre"
-//                            },
-//                            {
-//                                 "title": "Java (CMS) Developer",
-//                                 "company": "Efigence SA",
-//                                 "salary": "16 000 – 18 000 PLN",
-//                                 "offerUrl": "https://nofluffjobs.com/pl/job/java-cms-developer-efigence-warszawa-b4qs8loh"
-//                            }]""".trim()
-//                )
+                        .withBody(giveTwoOffers())
                 ));
         //when
-        Set<JobOfferResponse> jobOfferResponses = offerFetchable.fetchOffers();
+        //Set<JobOfferResponse> jobOfferResponses = offerFetchable.fetchOffers();
 
         //then
 
 //      step 2: scheduler ran 1st time and made GET to external server and system added 0 offers to database
+        //given
+
+        //when
+        scheduler.fetchOffers();
+
+        //then
+
+
 //      step 3: user tried to get JWT token by requesting POST /token with username=someUser, password=somePassword and system returned UNAUTHORIZED(401)
 //      step 4: user made GET /offers with no jwt token and system returned UNAUTHORIZED(401)
 //      step 5: user made POST /register with username=someUser, password=somePassword and system registered user with status OK(200)
@@ -62,5 +66,26 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
 //      step 15: user made GET /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and system returned OK(200) with 4 offers with ids: 1000,2000, 3000 and 4000
 
 
+    }
+
+    private String giveZeroOffer() {
+        return "[]";
+    }
+
+    private String giveTwoOffers() {
+        return """
+                  [
+                      {
+                          "title": "Junior Java Developer",
+                          "company": "BlueSoft Sp. z o.o.",
+                          "salary": "7 000 – 9 000 PLN",
+                          "offerUrl": "https://nofluffjobs.com/pl/job/junior-java-developer-bluesoft-remote-hfuanrre"
+                     },
+                     {
+                          "title": "Java (CMS) Developer",
+                          "company": "Efigence SA",
+                          "salary": "16 000 – 18 000 PLN",
+                          "offerUrl": "https://nofluffjobs.com/pl/job/java-cms-developer-efigence-warszawa-b4qs8loh"
+                     }]""".trim();
     }
 }
