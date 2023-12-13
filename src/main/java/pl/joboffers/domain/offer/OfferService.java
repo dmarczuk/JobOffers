@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 import pl.joboffers.domain.offer.exceptions.OfferDuplicateException;
 import pl.joboffers.domain.offer.exceptions.SaveOfferException;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -20,7 +23,7 @@ class OfferService {
         Set<Offer> jobOffers = fetchOffers();
         Set<Offer> offerToSave = filterNonExistingOffer(jobOffers);
         try {
-            return offerRepository.saveAll(jobOffers);
+            return new HashSet<>(offerRepository.saveAll(offerToSave));
         } catch (OfferDuplicateException duplicateException) {
             throw new SaveOfferException(duplicateException.getMessage()); // add jobOffers to argument
         }
@@ -34,7 +37,7 @@ class OfferService {
 
     private Set<Offer> filterNonExistingOffer(Set<Offer> jobOffers) {
         return jobOffers.stream()
-                .filter(offer -> !offerRepository.offerExist(offer))
+                .filter(offer -> !offerRepository.existsById(offer.offerUrl()))
                 .collect(Collectors.toSet());
     }
 }

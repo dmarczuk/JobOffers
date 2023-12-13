@@ -12,26 +12,33 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public class InMemoryOfferRepositoryTestImpl implements OfferRepository {
     Map<String, Offer> inMemoryDatabase = new ConcurrentHashMap<>();
+
     @Override
-    public Offer save(Offer offer) {
-        if(offerExist(offer)) {
-            throw new OfferDuplicateException("Offer url [" + offer.offerUrl() + "] already exist in database");
+    public <S extends Offer> S save(S entity) {
+        if(existsById(entity.offerUrl())) {
+            throw new OfferDuplicateException("Offer url [" + entity.offerUrl() + "] already exist in database");
         } else {
             String id = UUID.randomUUID().toString();
-            Offer savedOffer = new Offer(id, offer.companyName(), offer.position(), offer.salary(), offer.offerUrl());
+            S savedOffer = (S) new Offer(id, entity.companyName(), entity.position(), entity.salary(), entity.offerUrl());
             inMemoryDatabase.put(savedOffer.id(), savedOffer);
             return savedOffer;
         }
     }
 
     @Override
-    public Set<Offer> saveAll(Set<Offer> offers) {
-        return offers.stream()
+    public <S extends Offer> List<S> saveAll(Iterable<S> entities) {
+        return StreamSupport.stream(entities.spliterator(), false)
                 .map(this::save)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Offer> findAll() {
+        return new ArrayList<>(inMemoryDatabase.values());
     }
 
     @Override
@@ -39,19 +46,27 @@ public class InMemoryOfferRepositoryTestImpl implements OfferRepository {
         return Optional.ofNullable(inMemoryDatabase.get(id));
     }
 
+//    @Override
+//    public boolean offerExist(Offer offer) {
+//        return inMemoryDatabase.values().stream()
+//                .anyMatch(offerInDatabase -> offer.offerUrl().equals(offerInDatabase.offerUrl()));
+//    }
+
+    @Override
+    public <S extends Offer> boolean exists(Example<S> example) {
+        return inMemoryDatabase.values().stream()
+                .anyMatch(offerInDatabase -> example.getProbe().offerUrl().equals(offerInDatabase.offerUrl()));
+    }
+
     @Override
     public boolean existsById(String s) {
-        return false;
+        return inMemoryDatabase.values().stream()
+                .anyMatch(offerInDatabase -> s.equals(offerInDatabase.offerUrl()));
     }
 
     @Override
-    public <S extends Offer> List<S> saveAll(Iterable<S> entities) {
+    public List<Offer> findAll(Sort sort) {
         return null;
-    }
-
-    @Override
-    public List<Offer> findAll() {
-        return new ArrayList<>(inMemoryDatabase.values());
     }
 
     @Override
@@ -87,11 +102,6 @@ public class InMemoryOfferRepositoryTestImpl implements OfferRepository {
     @Override
     public void deleteAll() {
 
-    }
-
-    @Override
-    public List<Offer> findAll(Sort sort) {
-        return null;
     }
 
     @Override
@@ -135,19 +145,8 @@ public class InMemoryOfferRepositoryTestImpl implements OfferRepository {
     }
 
     @Override
-    public <S extends Offer> boolean exists(Example<S> example) {
-        return false;
-    }
-
-    @Override
     public <S extends Offer, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         return null;
-    }
-
-    @Override
-    public boolean offerExist(Offer offer) {
-        return inMemoryDatabase.values().stream()
-                .anyMatch(offerInDatabase -> offer.offerUrl().equals(offerInDatabase.offerUrl()));
     }
 
 }
