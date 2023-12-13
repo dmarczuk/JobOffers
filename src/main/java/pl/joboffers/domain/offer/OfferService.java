@@ -37,7 +37,7 @@ class OfferService {
 
     private Set<Offer> filterNonExistingOffer(Set<Offer> jobOffers) {
         return jobOffers.stream()
-                .filter(offer -> !offerRepository.existsById(offer.offerUrl()))
+                .filter(offer -> !offerRepository.existsOfferByOfferUrl(offer))
                 .collect(Collectors.toSet());
     }
 }

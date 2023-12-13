@@ -9,6 +9,7 @@ import pl.joboffers.infrastructure.offer.http.OfferFetcherRestTemplateConfigurat
 
 @SpringBootApplication
 @EnableConfigurationProperties(OfferFetcherRestTemplateConfigurationProperties.class)
+@EnableScheduling
 @EnableMongoRepositories
 public class JobOffersApplication {
 

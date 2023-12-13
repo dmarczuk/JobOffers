@@ -17,6 +17,8 @@ interface OfferRepository extends MongoRepository<Offer, String> {
 
     //List<Offer> findAll();
 
-    //boolean offerExist(Offer offer);
+    boolean existsOfferByOfferUrl(Offer offer);
+
+
 
 }

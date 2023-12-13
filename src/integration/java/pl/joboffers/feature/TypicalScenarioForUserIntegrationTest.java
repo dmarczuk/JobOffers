@@ -10,11 +10,13 @@ import org.springframework.http.HttpStatus;
 import pl.joboffers.BaseIntegrationTest;
 import pl.joboffers.domain.offer.OfferFetchable;
 import pl.joboffers.domain.offer.dto.JobOfferResponse;
+import pl.joboffers.domain.offer.dto.OfferResponseDto;
 import pl.joboffers.infrastructure.offer.scheduler.OfferFetcherScheduler;
 
 import java.time.Duration;
 import java.util.Set;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.*;
 
 //@EnableConfigurationProperties
@@ -35,7 +37,7 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
                 .willReturn(WireMock.aResponse()
                         .withStatus(HttpStatus.OK.value())
                         .withHeader("Content-Type", "application/json")
-                        .withBody(giveTwoOffers())
+                        .withBody(giveZeroOffer())
                 ));
         //when
         //Set<JobOfferResponse> jobOfferResponses = offerFetchable.fetchOffers();
@@ -46,7 +48,8 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
         //given
 
         //when
-        scheduler.fetchOffers();
+        Set<OfferResponseDto> savedOffers = scheduler.fetchOffers();
+        assertThat(savedOffers.size()).isEqualTo(0);
 
         //then
 
