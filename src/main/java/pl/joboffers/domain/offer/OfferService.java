@@ -21,9 +21,13 @@ class OfferService {
 
     public Set<Offer> fetchAllOffersAndSaveAllIfNotExists() { //method to fetch offers from server
         Set<Offer> jobOffers = fetchOffers();
-        Set<Offer> offerToSave = filterNonExistingOffer(jobOffers);
+        List<Offer> all = offerRepository.findAll();
+        Set<Offer> offersToSave = filterNonExistingOffer(jobOffers);
         try {
-            return new HashSet<>(offerRepository.saveAll(offerToSave));
+            List<Offer> all2 = offerRepository.findAll();
+            List<Offer> savedOffers = offerRepository.saveAll(offersToSave);
+            List<Offer> all3 = offerRepository.findAll();
+            return new HashSet<>(savedOffers);
         } catch (OfferDuplicateException duplicateException) {
             throw new SaveOfferException(duplicateException.getMessage()); // add jobOffers to argument
         }
@@ -37,7 +41,7 @@ class OfferService {
 
     private Set<Offer> filterNonExistingOffer(Set<Offer> jobOffers) {
         return jobOffers.stream()
-                .filter(offer -> !offerRepository.existsOfferByOfferUrl(offer))
+                .filter(offer -> !offerRepository.existsOfferByOfferUrl(offer.offerUrl()))
                 .collect(Collectors.toSet());
     }
 }

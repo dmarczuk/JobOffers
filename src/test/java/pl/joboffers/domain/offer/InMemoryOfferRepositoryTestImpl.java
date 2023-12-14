@@ -19,7 +19,7 @@ public class InMemoryOfferRepositoryTestImpl implements OfferRepository {
 
     @Override
     public <S extends Offer> S save(S entity) {
-        if(existsOfferByOfferUrl(entity)) {
+        if(existsOfferByOfferUrl(entity.offerUrl())) {
             throw new OfferDuplicateException("Offer url [" + entity.offerUrl() + "] already exist in database");
         } else {
             String id = UUID.randomUUID().toString();
@@ -47,9 +47,9 @@ public class InMemoryOfferRepositoryTestImpl implements OfferRepository {
     }
 
     @Override
-    public boolean existsOfferByOfferUrl(Offer offer) {
+    public boolean existsOfferByOfferUrl(String url) {
         return inMemoryDatabase.values().stream()
-                .anyMatch(offerInDatabase -> offer.offerUrl().equals(offerInDatabase.offerUrl()));
+                .anyMatch(offerInDatabase -> url.equals(offerInDatabase.offerUrl()));
     }
 
     @Override

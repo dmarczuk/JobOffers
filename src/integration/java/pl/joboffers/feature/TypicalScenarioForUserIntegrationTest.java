@@ -37,7 +37,7 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
                 .willReturn(WireMock.aResponse()
                         .withStatus(HttpStatus.OK.value())
                         .withHeader("Content-Type", "application/json")
-                        .withBody(giveZeroOffer())
+                        .withBody(giveTwoOffers())
                 ));
         //when
         //Set<JobOfferResponse> jobOfferResponses = offerFetchable.fetchOffers();
@@ -49,7 +49,10 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
 
         //when
         Set<OfferResponseDto> savedOffers = scheduler.fetchOffers();
-        assertThat(savedOffers.size()).isEqualTo(0);
+        assertThat(savedOffers.size()).isEqualTo(2);
+
+        Set<OfferResponseDto> savedDuplicateOffers = scheduler.fetchOffers();
+        assertThat(savedDuplicateOffers.size()).isEqualTo(0);
 
         //then
 
