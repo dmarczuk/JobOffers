@@ -1,5 +1,6 @@
 package pl.joboffers.domain.offer;
 
+import net.bytebuddy.description.type.TypeDescription;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,9 +24,9 @@ public class InMemoryOfferRepositoryTestImpl implements OfferRepository {
             throw new OfferDuplicateException("Offer url [" + entity.offerUrl() + "] already exist in database");
         } else {
             String id = UUID.randomUUID().toString();
-            S savedOffer = (S) new Offer(id, entity.companyName(), entity.position(), entity.salary(), entity.offerUrl());
+            Offer savedOffer = new Offer(id, entity.companyName(), entity.position(), entity.salary(), entity.offerUrl());
             inMemoryDatabase.put(savedOffer.id(), savedOffer);
-            return savedOffer;
+            return (S) savedOffer;
         }
     }
 
@@ -33,7 +34,8 @@ public class InMemoryOfferRepositoryTestImpl implements OfferRepository {
     public <S extends Offer> List<S> saveAll(Iterable<S> entities) {
         return StreamSupport.stream(entities.spliterator(), false)
                 .map(this::save)
-                .collect(Collectors.toList());
+                .toList();
+//                .collect(Collectors.toList());
     }
 
     @Override
@@ -47,9 +49,13 @@ public class InMemoryOfferRepositoryTestImpl implements OfferRepository {
     }
 
     @Override
-    public boolean existsOfferByOfferUrl(String url) {
+    public Optional<Offer> findByOfferUrl(String offerUrl) {
+        return Optional.of(inMemoryDatabase.get(offerUrl));
+    }
+    @Override
+    public boolean existsOfferByOfferUrl(String offerUrl) {
         return inMemoryDatabase.values().stream()
-                .anyMatch(offerInDatabase -> url.equals(offerInDatabase.offerUrl()));
+                .anyMatch(offerInDatabase -> offerInDatabase.offerUrl().equals(offerUrl));
     }
 
     @Override

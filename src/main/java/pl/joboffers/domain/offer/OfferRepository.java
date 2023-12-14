@@ -13,6 +13,8 @@ interface OfferRepository extends MongoRepository<Offer, String> {
 
     //Set<Offer> saveAll(Set<Offer> offers);
 
+    Optional<Offer> findByOfferUrl(String offerUrl);
+
     Optional<Offer> findById(String id);
 
     //List<Offer> findAll();
