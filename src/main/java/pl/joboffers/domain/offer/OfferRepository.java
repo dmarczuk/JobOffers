@@ -9,18 +9,11 @@ import java.util.Set;
 @Repository
 interface OfferRepository extends MongoRepository<Offer, String> {
 
-   // Offer save(Offer offer);
+    //Optional<Offer> findByOfferUrl(String offerUrl);
 
-    //Set<Offer> saveAll(Set<Offer> offers);
-
-    Optional<Offer> findByOfferUrl(String offerUrl);
-
-    Optional<Offer> findById(String id);
+//    Optional<Offer> findById(String id);
 
     //List<Offer> findAll();
 
-    boolean existsOfferByOfferUrl(String url);
-
-
-
+    boolean existsByOfferUrl(String url);
 }

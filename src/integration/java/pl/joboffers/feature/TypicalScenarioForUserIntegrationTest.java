@@ -48,10 +48,10 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
         //given
 
         //when
-        Set<OfferResponseDto> savedOffers = scheduler.fetchOffers();
+        Set<OfferResponseDto> savedOffers = scheduler.fetchAllOffersAndSaveAllIfNotExists();
         assertThat(savedOffers.size()).isEqualTo(2);
 
-        Set<OfferResponseDto> savedDuplicateOffers = scheduler.fetchOffers();
+        Set<OfferResponseDto> savedDuplicateOffers = scheduler.fetchAllOffersAndSaveAllIfNotExists();
         assertThat(savedDuplicateOffers.size()).isEqualTo(0);
 
         //then

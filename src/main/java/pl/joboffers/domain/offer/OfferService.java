@@ -26,6 +26,7 @@ class OfferService {
         try {
             List<Offer> all2 = offerRepository.findAll();
             List<Offer> savedOffers = offerRepository.saveAll(offersToSave);
+            // podwojne zapisywanie do bazy??? Dlaczego?? (przy dwukrotnym dodawaniu 2 tych samych ofert)
             List<Offer> all3 = offerRepository.findAll();
             return new HashSet<>(savedOffers);
         } catch (OfferDuplicateException duplicateException) {
@@ -41,7 +42,7 @@ class OfferService {
 
     private Set<Offer> filterNonExistingOffer(Set<Offer> jobOffers) {
         return jobOffers.stream()
-                .filter(offer -> !offerRepository.existsOfferByOfferUrl(offer.offerUrl()))
+                .filter(offer -> !offerRepository.existsByOfferUrl(offer.offerUrl()))
                 .collect(Collectors.toSet());
     }
 }
