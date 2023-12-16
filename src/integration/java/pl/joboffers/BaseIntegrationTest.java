@@ -2,6 +2,7 @@ package pl.joboffers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
+import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -20,6 +21,7 @@ import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMoc
 @ActiveProfiles("integration")
 @AutoConfigureMockMvc
 @Testcontainers
+@Log4j2
 public class BaseIntegrationTest {
 
     public static final String WIRE_MOCK_HOST = "http://localhost";
@@ -41,6 +43,7 @@ public class BaseIntegrationTest {
     @DynamicPropertySource
     public static void propertyOverride(DynamicPropertyRegistry registry) {
         registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
+        log.info("Port database: " + mongoDBContainer.getReplicaSetUrl());
         registry.add("joboffers.offer.http.client.config.port", () -> wireMockServer.getPort());
         registry.add("joboffers.offer.http.client.config.uri", () -> "http://localhost");
     }

@@ -10,11 +10,13 @@ import org.springframework.http.HttpStatus;
 import pl.joboffers.BaseIntegrationTest;
 import pl.joboffers.domain.offer.OfferFetchable;
 import pl.joboffers.domain.offer.dto.JobOfferResponse;
+import pl.joboffers.domain.offer.dto.OfferResponseDto;
 import pl.joboffers.infrastructure.offer.scheduler.OfferFetcherScheduler;
 
 import java.time.Duration;
 import java.util.Set;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.*;
 
 //@EnableConfigurationProperties
@@ -46,7 +48,11 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
         //given
 
         //when
-        scheduler.fetchOffers();
+        Set<OfferResponseDto> savedOffers = scheduler.fetchAllOffersAndSaveAllIfNotExists();
+        assertThat(savedOffers.size()).isEqualTo(2);
+
+        Set<OfferResponseDto> savedDuplicateOffers = scheduler.fetchAllOffersAndSaveAllIfNotExists();
+        assertThat(savedDuplicateOffers.size()).isEqualTo(0);
 
         //then
 

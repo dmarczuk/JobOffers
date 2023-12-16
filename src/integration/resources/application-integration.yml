@@ -5,16 +5,3 @@ joboffers:
 
 scheduling:
   enabled: false
-#spring:
-#  data:
-#    mongodb:
-#      uri: mongodb://admin:admin@localhost:27017/job-offers
-#
-#joboffers:
-#  offer:
-#    http:
-#      client:
-#        config:
-#          uri: localhost
-#
-#          port: 123123

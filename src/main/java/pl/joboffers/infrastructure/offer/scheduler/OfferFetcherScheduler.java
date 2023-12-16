@@ -17,7 +17,7 @@ public class OfferFetcherScheduler {
 
     private final OfferFacade offerFacade;
     @Scheduled(cron = "${joboffers.offer.scheduler.delayTime}")
-    public Set<OfferResponseDto> fetchOffers() {
+    public Set<OfferResponseDto> fetchAllOffersAndSaveAllIfNotExists() {
         log.info("scheduler started");
         return offerFacade.fetchAllOffersAndSaveAllIfNotExists();
     }

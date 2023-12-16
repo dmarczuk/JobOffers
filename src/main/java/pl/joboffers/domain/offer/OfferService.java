@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 import pl.joboffers.domain.offer.exceptions.OfferDuplicateException;
 import pl.joboffers.domain.offer.exceptions.SaveOfferException;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -18,9 +21,14 @@ class OfferService {
 
     public Set<Offer> fetchAllOffersAndSaveAllIfNotExists() { //method to fetch offers from server
         Set<Offer> jobOffers = fetchOffers();
-       // Set<Offer> offerToSave = filterNonExistingOffer(jobOffers);
+        List<Offer> all = offerRepository.findAll();
+        Set<Offer> offersToSave = filterNonExistingOffer(jobOffers);
         try {
-            return offerRepository.saveAll(jobOffers);
+            List<Offer> all2 = offerRepository.findAll();
+            List<Offer> savedOffers = offerRepository.saveAll(offersToSave);
+            // podwojne zapisywanie do bazy??? Dlaczego?? (przy dwukrotnym dodawaniu 2 tych samych ofert)
+            List<Offer> all3 = offerRepository.findAll();
+            return new HashSet<>(savedOffers);
         } catch (OfferDuplicateException duplicateException) {
             throw new SaveOfferException(duplicateException.getMessage()); // add jobOffers to argument
         }
@@ -34,7 +42,7 @@ class OfferService {
 
     private Set<Offer> filterNonExistingOffer(Set<Offer> jobOffers) {
         return jobOffers.stream()
-                .filter(offer -> !offerRepository.offerExist(offer))
+                .filter(offer -> !offerRepository.existsByOfferUrl(offer.offerUrl()))
                 .collect(Collectors.toSet());
     }
 }
