@@ -19,30 +19,30 @@ class OfferService {
     private OfferFetchable offerFetcher;
     private OfferRepository offerRepository;
 
-    public Set<Offer> fetchAllOffersAndSaveAllIfNotExists() { //method to fetch offers from server
-        Set<Offer> jobOffers = fetchOffers();
+    public List<Offer> fetchAllOffersAndSaveAllIfNotExists() { //method to fetch offers from server
+        List<Offer> jobOffers = fetchOffers();
         List<Offer> all = offerRepository.findAll();
-        Set<Offer> offersToSave = filterNonExistingOffer(jobOffers);
+        List<Offer> offersToSave = filterNonExistingOffer(jobOffers);
         try {
             List<Offer> all2 = offerRepository.findAll();
             List<Offer> savedOffers = offerRepository.saveAll(offersToSave);
             // podwojne zapisywanie do bazy??? Dlaczego?? (przy dwukrotnym dodawaniu 2 tych samych ofert)
             List<Offer> all3 = offerRepository.findAll();
-            return new HashSet<>(savedOffers);
+            return savedOffers;
         } catch (OfferDuplicateException duplicateException) {
             throw new SaveOfferException(duplicateException.getMessage()); // add jobOffers to argument
         }
     }
 
-    private Set<Offer> fetchOffers() {
+    private List<Offer> fetchOffers() {
         return offerFetcher.fetchOffers().stream()
                 .map(OfferMapper::mapperJobOfferResponseToOffer)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
-    private Set<Offer> filterNonExistingOffer(Set<Offer> jobOffers) {
+    private List<Offer> filterNonExistingOffer(List<Offer> jobOffers) {
         return jobOffers.stream()
                 .filter(offer -> !offerRepository.existsByOfferUrl(offer.offerUrl()))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 }

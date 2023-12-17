@@ -19,7 +19,7 @@ public class OfferRestController {
     private final OfferFacade offerFacade;
     @GetMapping("/offers")
     public ResponseEntity<JobOffersResponseDto> getOffers() {
-        JobOffersResponseDto jobOffers = new JobOffersResponseDto(offerFacade.findAllOffers().stream().toList());
+        JobOffersResponseDto jobOffers = new JobOffersResponseDto(offerFacade.findAllOffers());
         return ResponseEntity.ok(jobOffers);
 
     }

@@ -6,5 +6,5 @@ import java.util.List;
 import java.util.Set;
 
 public interface OfferFetchable {
-    Set<JobOfferResponse> fetchOffers();
+    List<JobOfferResponse> fetchOffers();
 }

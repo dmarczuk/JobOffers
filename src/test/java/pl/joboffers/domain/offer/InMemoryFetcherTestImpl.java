@@ -6,14 +6,14 @@ import java.util.List;
 import java.util.Set;
 
 public class InMemoryFetcherTestImpl implements OfferFetchable {
-    private Set<JobOfferResponse> listOffers;
+    private List<JobOfferResponse> listOffers;
 
-    public InMemoryFetcherTestImpl(Set<JobOfferResponse> listOffers) {
+    public InMemoryFetcherTestImpl(List<JobOfferResponse> listOffers) {
         this.listOffers = listOffers;
     }
 
     @Override
-    public Set<JobOfferResponse> fetchOffers() {
+    public List<JobOfferResponse> fetchOffers() {
         return listOffers;
     }
 }

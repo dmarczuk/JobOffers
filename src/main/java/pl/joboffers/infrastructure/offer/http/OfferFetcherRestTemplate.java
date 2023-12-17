@@ -15,6 +15,7 @@ import pl.joboffers.domain.offer.dto.JobOfferResponse;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -25,25 +26,25 @@ public class OfferFetcherRestTemplate implements OfferFetchable {
     private final String uri;
     private final int port;
     @Override
-    public Set<JobOfferResponse> fetchOffers() {
+    public List<JobOfferResponse> fetchOffers() {
         //String url = "http://ec2-3-120-147-150.eu-central-1.compute.amazonaws.com:5057/offers";
         log.info("Started fetching offers");
         HttpHeaders headers = new HttpHeaders();
         final HttpEntity<HttpHeaders> requestEntity = new HttpEntity<>(headers);
         try {
             String url = getUrlForService("/offers");
-            ResponseEntity<Set<JobOfferResponse>> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity,
+            ResponseEntity<List<JobOfferResponse>> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity,
                     new ParameterizedTypeReference<>() {
                     });
-            final Set<JobOfferResponse> body = response.getBody();
+            final List<JobOfferResponse> body = response.getBody();
             if (body == null) {
                 log.info("Response body was null");
-                return Collections.emptySet();
+                return Collections.emptyList();
             }
             return body;
         } catch (ResourceAccessException e) {
             log.error("Error while fetching offers: " + e.getMessage());
-            return Collections.emptySet();
+            return Collections.emptyList();
         }
    }
 

@@ -7,6 +7,7 @@ import pl.joboffers.domain.offer.dto.OfferResponseDto;
 import pl.joboffers.domain.offer.exceptions.OfferNotFoundException;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -16,11 +17,11 @@ public class OfferFacade {
     private final OfferRepository offerRepository;
     private final OfferService offerService;
 
-    public Set<OfferResponseDto> findAllOffers() {
+    public List<OfferResponseDto> findAllOffers() {
         return offerRepository.findAll()
                 .stream()
                 .map(OfferMapper::mapperOfferToOfferResponseDto)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
     public OfferResponseDto findOfferById(String id) {
@@ -35,10 +36,10 @@ public class OfferFacade {
         return OfferMapper.mapperOfferToOfferResponseDto(offerSaved);
     }
 
-    public Set<OfferResponseDto> fetchAllOffersAndSaveAllIfNotExists() {
+    public List<OfferResponseDto> fetchAllOffersAndSaveAllIfNotExists() {
         return offerService.fetchAllOffersAndSaveAllIfNotExists()
                 .stream()
                 .map(OfferMapper::mapperOfferToOfferResponseDto)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import pl.joboffers.domain.offer.OfferFacade;
 import pl.joboffers.domain.offer.dto.OfferResponseDto;
 
+import java.util.List;
 import java.util.Set;
 
 @Component
@@ -17,7 +18,7 @@ public class OfferFetcherScheduler {
 
     private final OfferFacade offerFacade;
     @Scheduled(cron = "${joboffers.offer.scheduler.delayTime}")
-    public Set<OfferResponseDto> fetchAllOffersAndSaveAllIfNotExists() {
+    public List<OfferResponseDto> fetchAllOffersAndSaveAllIfNotExists() {
         log.info("scheduler started");
         return offerFacade.fetchAllOffersAndSaveAllIfNotExists();
     }

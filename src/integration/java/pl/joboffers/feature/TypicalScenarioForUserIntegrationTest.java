@@ -46,10 +46,10 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
 
 //      step 2: scheduler ran 1st time and made GET to external server and system added 0 offers to database
         //given && when && then
-        Set<OfferResponseDto> savedOffers = scheduler.fetchAllOffersAndSaveAllIfNotExists();
+        List<OfferResponseDto> savedOffers = scheduler.fetchAllOffersAndSaveAllIfNotExists();
         assertThat(savedOffers.size()).isEqualTo(2);
 
-        Set<OfferResponseDto> savedDuplicateOffers = scheduler.fetchAllOffersAndSaveAllIfNotExists();
+        List<OfferResponseDto> savedDuplicateOffers = scheduler.fetchAllOffersAndSaveAllIfNotExists();
         assertThat(savedDuplicateOffers.size()).isEqualTo(0);
 
 
