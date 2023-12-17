@@ -2,11 +2,14 @@ spring:
   data:
     mongodb:
       uri: mongodb://admin:admin@localhost:27017/job-offers
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 
 joboffers:
   offer:
     scheduler:
-      delayTime: "*/10 * * * * *"
+      delayTime: "* * */3 * * *"
     http:
       client:
         config:
