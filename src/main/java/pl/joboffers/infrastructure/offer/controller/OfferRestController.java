@@ -19,7 +19,8 @@ public class OfferRestController {
     private final OfferFacade offerFacade;
     @GetMapping("/offers")
     public ResponseEntity<JobOffersResponseDto> getOffers() {
-        JobOffersResponseDto jobOffers = new JobOffersResponseDto(offerFacade.findAllOffers());
+        List<OfferResponseDto> allOffers = offerFacade.findAllOffers();
+        JobOffersResponseDto jobOffers = new JobOffersResponseDto(allOffers);
         return ResponseEntity.ok(jobOffers);
 
     }

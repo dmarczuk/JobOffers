@@ -19,15 +19,15 @@ class OfferMapper {
         return new OfferResponseDto(
                 offer.id(),
                 offer.companyName(),
-                offer.position(),
                 offer.salary(),
+                offer.position(),
                 offer.offerUrl());
     }
 
 
     public static Offer mapperJobOfferResponseToOffer(JobOfferResponse jobOfferResponse) {
         return Offer.builder()
-                .companyName(jobOfferResponse.companyName())
+                .companyName(jobOfferResponse.company())
                 .position(jobOfferResponse.title())
                 .salary(jobOfferResponse.salary())
                 .offerUrl(jobOfferResponse.offerUrl())
