@@ -1,7 +1,7 @@
 package pl.joboffers.feature;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.tomakehurst.wiremock.client.WireMock;
-import org.awaitility.Awaitility;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,13 +10,11 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import pl.joboffers.BaseIntegrationTest;
 import pl.joboffers.domain.offer.OfferFetchable;
-import pl.joboffers.domain.offer.dto.JobOfferResponse;
 import pl.joboffers.domain.offer.dto.OfferResponseDto;
-import pl.joboffers.infrastructure.offer.controller.JobOffersResponseDto;
 import pl.joboffers.infrastructure.offer.scheduler.OfferFetcherScheduler;
+import java.nio.charset.StandardCharsets;
 
 import java.util.List;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -64,20 +62,22 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
         //when
         ResultActions perform = mockMvc.perform(get("/offers")
 //                .content(giveTwoOffers())
-//                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
         );
         MvcResult mvcResult = perform.andExpect(status().isOk()).andReturn();
-        String json = mvcResult.getResponse().getContentAsString();
-        JobOffersResponseDto jobOffers = objectMapper.readValue(json, JobOffersResponseDto.class);
+        String jsonWithOffers = mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8);
+        List<OfferResponseDto> jobOffers = objectMapper.readValue(jsonWithOffers, new TypeReference<>(){
+
+        });
 //        List<JobOfferResponse> jobOffers = jobOffersResponseDto.jobOffers();
 
 //        then
         assertAll(
-                () -> assertThat(jobOffers.jobOffers().size()).isEqualTo(2),
-                () -> assertThat(jobOffers.jobOffers().get(0).offerUrl()).isEqualTo("https://nofluffjobs.com/pl/job/junior-java-developer-bluesoft-remote-hfuanrre"),
-                () -> assertThat(jobOffers.jobOffers().get(0).salary()).isEqualTo("7 000 – 9 000 PLN"),
-                () -> assertThat(jobOffers.jobOffers().get(1).offerUrl()).isEqualTo("https://nofluffjobs.com/pl/job/java-cms-developer-efigence-warszawa-b4qs8loh"),
-                () -> assertThat(jobOffers.jobOffers().get(1).salary()).isEqualTo( "16 000 – 18 000 PLN")
+                () -> assertThat(jobOffers.size()).isEqualTo(2),
+                () -> assertThat(jobOffers.get(0).offerUrl()).isEqualTo("https://nofluffjobs.com/pl/job/junior-java-developer-bluesoft-remote-hfuanrre"),
+                () -> assertThat(jobOffers.get(0).salary()).isEqualTo("7 000 – 9 000 PLN"),
+                () -> assertThat(jobOffers.get(1).offerUrl()).isEqualTo("https://nofluffjobs.com/pl/job/java-cms-developer-efigence-warszawa-b4qs8loh"),
+                () -> assertThat(jobOffers.get(1).salary()).isEqualTo( "16 000 – 18 000 PLN")
         );
 
 
