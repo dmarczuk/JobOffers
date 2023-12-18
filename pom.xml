@@ -77,7 +77,7 @@
             <scope>test</scope>
         </dependency>
 
-<!--        SWAGGER-->
+<!--        SWAGGER  http://localhost:8080/swagger-ui/-->
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-boot-starter</artifactId>
