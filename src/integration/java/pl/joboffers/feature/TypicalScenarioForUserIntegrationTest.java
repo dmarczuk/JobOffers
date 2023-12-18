@@ -19,6 +19,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -109,6 +110,25 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
 //      step 14: scheduler ran 3rd time and made GET to external server and system added 2 new offers with ids: 3000 and 4000 to database
 //      step 15: user made GET /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and system returned OK(200) with 4 offers with ids: 1000,2000, 3000 and 4000
 
+
+//      step 16: user made POST /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and offer as body and system returned CREATED(201) with saved offer
+        //when
+        ResultActions performGetResultWithAddOffer = mockMvc.perform(post("/offers")
+                .content("""
+                  [
+                      {
+                          "company": "testCompany",
+                          "salary": "testSalary",
+                          "position": "testPosition",
+                          "offerUrl": "testUrl"
+                     }
+                     ]""".trim())
+                .contentType(MediaType.APPLICATION_JSON)
+        );
+        //then
+        performGetResultWithAddOffer.andExpect(status().isCreated());
+
+//      step 17: user made GET /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and system returned OK(200) with 1 offer
 
     }
 

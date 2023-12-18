@@ -1,4 +1,4 @@
-package pl.joboffers.infrastructure.offer.controller;
+package pl.joboffers.infrastructure.offer.controller.error;
 
 import lombok.extern.java.Log;
 import lombok.extern.log4j.Log4j2;

@@ -1,4 +1,4 @@
-package pl.joboffers.infrastructure.offer.controller;
+package pl.joboffers.infrastructure.offer.controller.error;
 
 import lombok.Builder;
 import org.springframework.http.HttpStatus;

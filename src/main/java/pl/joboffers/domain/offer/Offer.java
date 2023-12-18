@@ -2,6 +2,7 @@ package pl.joboffers.domain.offer;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.NonNull;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -17,6 +18,6 @@ record Offer(
         @Field("company") String companyName,
         @Field("position") String position,
         @Field("salary") String salary,
-        @Field("url") @Indexed(unique = true) String offerUrl) {
+        @Field("url") @Indexed(unique = true) @NonNull String offerUrl) {
 
 }
