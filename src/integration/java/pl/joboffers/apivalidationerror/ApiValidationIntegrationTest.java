@@ -22,4 +22,19 @@ public class ApiValidationIntegrationTest extends BaseIntegrationTest {
         );
         performGetResultWithAddOffer.andExpect(status().isBadRequest()).andReturn();
     }
+
+    @Test
+    public void should_return_400_bad_request_when_request_does_not_have_url_offer() throws Exception {
+        ResultActions performGetResultWithAddOffer = mockMvc.perform(post("/offers")
+                .content("""
+                        {
+                            "company": "testCompany",
+                            "salary": "testSalary",
+                            "position": "testPosition",
+                        }
+                        """.trim())
+                .contentType(MediaType.APPLICATION_JSON)
+        );
+        performGetResultWithAddOffer.andExpect(status().isBadRequest()).andReturn();
+    }
 }

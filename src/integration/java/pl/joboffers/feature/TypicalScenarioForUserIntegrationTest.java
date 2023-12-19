@@ -114,8 +114,7 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
 //      step 16: user made POST /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and offer as body and system returned CREATED(201) with saved offer
         //when
         ResultActions performGetResultWithAddOffer = mockMvc.perform(post("/offers")
-                .content("""
-refoctor jso                  
+                .content("""           
                       {
                           "company": "testCompany",
                           "salary": "testSalary",

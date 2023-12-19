@@ -8,6 +8,7 @@ import pl.joboffers.domain.offer.dto.JobOfferResponse;
 import pl.joboffers.domain.offer.dto.OfferRequestDto;
 import pl.joboffers.domain.offer.dto.OfferResponseDto;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.Set;
@@ -31,7 +32,7 @@ public class OfferRestController {
     }
 
     @PostMapping("/offers")
-    public ResponseEntity<OfferResponseDto> addOffer(@RequestBody OfferRequestDto offerToSave) {
+    public ResponseEntity<OfferResponseDto> addOffer(@RequestBody @Valid OfferRequestDto offerToSave) {
         OfferResponseDto savedOffer = offerFacade.saveOffer(offerToSave);
         return ResponseEntity.ok(savedOffer);
     }
