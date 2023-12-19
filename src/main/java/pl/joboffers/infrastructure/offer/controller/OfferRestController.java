@@ -1,6 +1,7 @@
 package pl.joboffers.infrastructure.offer.controller;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.joboffers.domain.offer.OfferFacade;
@@ -34,7 +35,7 @@ public class OfferRestController {
     @PostMapping("/offers")
     public ResponseEntity<OfferResponseDto> addOffer(@RequestBody @Valid OfferRequestDto offerToSave) {
         OfferResponseDto savedOffer = offerFacade.saveOffer(offerToSave);
-        return ResponseEntity.ok(savedOffer);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedOffer);
     }
 
 }

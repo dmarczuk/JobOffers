@@ -15,6 +15,7 @@ import pl.joboffers.infrastructure.offer.scheduler.OfferFetcherScheduler;
 import java.nio.charset.StandardCharsets;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -125,9 +126,42 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
         );
         //then
-        performGetResultWithAddOffer.andExpect(status().isCreated());
+        String createdOfferJson = performGetResultWithAddOffer.andExpect(status().isCreated())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        OfferResponseDto parsedCreatedOfferJson = objectMapper.readValue(createdOfferJson, OfferResponseDto.class);
+        String id = parsedCreatedOfferJson.id();
+        assertAll(
+                () -> assertThat(parsedCreatedOfferJson.offerUrl()).isEqualTo("testUrl"),
+                () -> assertThat(parsedCreatedOfferJson.company()).isEqualTo("testCompany"),
+                () -> assertThat(parsedCreatedOfferJson.salary()).isEqualTo("testSalary"),
+                () -> assertThat(parsedCreatedOfferJson.position()).isEqualTo("testPosition"),
+                () -> assertThat(id).isNotNull()
+        );
 
 //      step 17: user made GET /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and system returned OK(200) with 1 offer
+        //given
+        //when
+        ResultActions performGetResultWithOfferAddedByUser = mockMvc.perform(get("/offers")
+//                .content(giveTwoOffers())
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+        MvcResult mvcResultFromUser = performGetResultWithOfferAddedByUser.andExpect(status().isOk()).andReturn();
+        String jsonWithOffersFromUser = mvcResultFromUser.getResponse().getContentAsString(StandardCharsets.UTF_8);
+        List<OfferResponseDto> jobOffersFromUser = objectMapper.readValue(jsonWithOffersFromUser, new TypeReference<>(){
+
+        });
+        List<OfferResponseDto> addedOffer = jobOffersFromUser
+                .stream()
+                .filter(offer -> offer.offerUrl().equals("testUrl"))
+                .toList();
+        assertAll(
+                () -> assertThat(addedOffer.size()).isEqualTo(1),
+                () -> assertThat(addedOffer.get(0).offerUrl()).isEqualTo("testUrl"),
+                () -> assertThat(addedOffer.get(0).salary()).isEqualTo("testSalary")
+        );
 
     }
 
