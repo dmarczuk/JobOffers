@@ -18,6 +18,6 @@ record Offer(
         @Field("company") String companyName,
         @Field("position") String position,
         @Field("salary") String salary,
-        @Field("url") @Indexed(unique = true) @NonNull String offerUrl) {
+        @Field("url") @Indexed(unique = true) String offerUrl) {
 
 }

@@ -33,7 +33,7 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
     OfferFetcherScheduler scheduler;
 
     @Test
-    public void should_user_go_by_whole_path() throws Exception { //?? name of test ??????
+    public void should_user_go_by_whole_happy_path() throws Exception { //?? name of test ??????
 
 //      step 1: there are no offers in external HTTP server (http://ec2-3-120-147-150.eu-central-1.compute.amazonaws.com:5057/offers)
         //given && when  && then

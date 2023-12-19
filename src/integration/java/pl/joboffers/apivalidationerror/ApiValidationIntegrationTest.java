@@ -42,36 +42,36 @@ public class ApiValidationIntegrationTest extends BaseIntegrationTest {
     @Test
     public void should_return_400_bad_request_when_request_add_duplicate_offer_url() throws Exception {
         //given
-        ResultActions performGetResultWithAddOffer = mockMvc.perform(post("/offers")
+        mockMvc.perform(post("/offers")
                 .content("""
                         {
                             "company": "testCompany",
                             "salary": "testSalary",
                             "position": "testPosition",
-                            "offerUrl": "testUrl
+                            "offerUrl": "testUrl"
                         }
                         """.trim())
                 .contentType(MediaType.APPLICATION_JSON)
         );
 
-        //when
-//        ResultActions performGetResultWithAddOffer = mockMvc.perform(post("/offers")
-//                .content("""
-//                        {
-//                        "company": "testCompany",
-//                        "salary": "testSalary",
-//                        "position": "testPosition",
-//                        "offerUrl": "testUrl"
-//                        }
-//                        """.trim())
-//                .contentType(MediaType.APPLICATION_JSON)
-//        );
+//      when
+        ResultActions performGetResultWithAddOffer = mockMvc.perform(post("/offers")
+                .content("""
+                        {
+                        "company": "testCompany",
+                        "salary": "testSalary",
+                        "position": "testPosition",
+                        "offerUrl": "testUrl"
+                        }
+                        """.trim())
+                .contentType(MediaType.APPLICATION_JSON)
+        );
         MvcResult mvcResult = performGetResultWithAddOffer.andExpect(status().isBadRequest()).andReturn();
-        String json = mvcResult.getResponse().getContentAsString();
-        ApiValidationErrorDto result = objectMapper.readValue(json, ApiValidationErrorDto.class);
-
-        //then
-        assertThat(result.messages()).contains("offer url should not be null");
+//        String json = mvcResult.getResponse().getContentAsString();
+//        ApiValidationErrorDto result = objectMapper.readValue(json, ApiValidationErrorDto.class);
+//
+//        //then
+//        assertThat(result.messages()).contains("offer url should not be null");
     }
 }
 

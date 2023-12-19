@@ -74,7 +74,7 @@ class OfferFacadeTest {
         //then
         AssertionsForClassTypes.assertThat(thrown)
                 .isInstanceOf(OfferNotFoundException.class)
-                .hasMessage("Offer not found");
+                .hasMessage("Offer with id " + savedOffer.id() + 1 + " not found");
     }
 
     @Test
