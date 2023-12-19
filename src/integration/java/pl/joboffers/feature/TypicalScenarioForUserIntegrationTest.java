@@ -115,14 +115,14 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
         //when
         ResultActions performGetResultWithAddOffer = mockMvc.perform(post("/offers")
                 .content("""
-                  [
+refoctor jso                  
                       {
                           "company": "testCompany",
                           "salary": "testSalary",
                           "position": "testPosition",
                           "offerUrl": "testUrl"
                      }
-                     ]""".trim())
+                     """.trim())
                 .contentType(MediaType.APPLICATION_JSON)
         );
         //then

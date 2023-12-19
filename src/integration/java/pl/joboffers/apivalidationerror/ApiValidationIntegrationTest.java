@@ -15,6 +15,8 @@ public class ApiValidationIntegrationTest extends BaseIntegrationTest {
     public void should_return_400_bad_request_when_request_does_not_have_offer() throws Exception {
         ResultActions performGetResultWithAddOffer = mockMvc.perform(post("/offers")
                 .content("""
+                        {
+                        }
                         """.trim())
                 .contentType(MediaType.APPLICATION_JSON)
         );

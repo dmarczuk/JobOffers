@@ -30,7 +30,7 @@ public class OfferRestController {
         return ResponseEntity.ok(offerById);
     }
 
-    @PostMapping("/offersy")
+    @PostMapping("/offers")
     public ResponseEntity<OfferResponseDto> addOffer(@RequestBody OfferRequestDto offerToSave) {
         OfferResponseDto savedOffer = offerFacade.saveOffer(offerToSave);
         return ResponseEntity.ok(savedOffer);
