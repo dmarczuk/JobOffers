@@ -26,8 +26,8 @@ public class OfferRestControllerErrorHandler {
     @ResponseBody
     @ResponseStatus(HttpStatus.CONFLICT)
     public OfferUrlExistErrorResponse offerUrlAlreadyExistInDatabase(DuplicateKeyException exception) {
-        String message = exception.getMessage();
-        log.error(message);
-        return new OfferUrlExistErrorResponse(message, HttpStatus.NOT_FOUND);
+        String message = "Offer url already exist";
+        log.error(exception.getMessage());
+        return new OfferUrlExistErrorResponse(message, HttpStatus.CONFLICT);
     }
 }

@@ -19,19 +19,10 @@ class OfferService {
     private OfferFetchable offerFetcher;
     private OfferRepository offerRepository;
 
-    public List<Offer> fetchAllOffersAndSaveAllIfNotExists() { //method to fetch offers from server
+    public List<Offer> fetchAllOffersAndSaveAllIfNotExists() { //method to fetch offers from server (problem z podwojnym zapisywaniem)
         List<Offer> jobOffers = fetchOffers();
-        List<Offer> all = offerRepository.findAll();
         List<Offer> offersToSave = filterNonExistingOffer(jobOffers);
-        try {
-            List<Offer> all2 = offerRepository.findAll();
-            List<Offer> savedOffers = offerRepository.saveAll(offersToSave);
-            // podwojne zapisywanie do bazy??? Dlaczego?? (przy dwukrotnym dodawaniu 2 tych samych ofert)
-            List<Offer> all3 = offerRepository.findAll();
-            return savedOffers;
-        } catch (OfferDuplicateException duplicateException) {
-            throw new SaveOfferException(duplicateException.getMessage()); // add jobOffers to argument
-        }
+        return offerRepository.saveAll(offersToSave);
     }
 
     private List<Offer> fetchOffers() {
