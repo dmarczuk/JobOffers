@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ApiValidationIntegrationTest extends BaseIntegrationTest {
 
     @Test
-    public void should_return_400_bad_request_when_request_does_not_have_offer() throws Exception {
+    public void should_return_400_bad_request_when_request_does_not_have_correct_offer() throws Exception {
         //when
         ResultActions performGetResultWithAddOffer = mockMvc.perform(post("/offers")
                 .content("""
