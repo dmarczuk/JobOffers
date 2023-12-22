@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import pl.joboffers.BaseIntegrationTest;
+import pl.joboffers.domain.offer.OfferFacade;
 import pl.joboffers.domain.offer.OfferFetchable;
 import pl.joboffers.domain.offer.dto.OfferResponseDto;
 import pl.joboffers.infrastructure.offer.scheduler.OfferFetcherScheduler;
@@ -33,6 +34,9 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
     OfferFetcherScheduler scheduler;
+
+    @Autowired
+    OfferFacade offerFacade;
 
     @Test
     public void should_user_go_by_whole_happy_path() throws Exception { //?? name of test ??????
@@ -106,8 +110,10 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
 //        then
         assertAll(
                 () -> assertThat(twoOffers.size()).isEqualTo(2),
-                () -> assertThat(twoOffers.contains(firstOffer())).isTrue(),
-                () -> assertThat(twoOffers.contains(secondOffer())).isTrue()
+                () -> assertThat(twoOffers).containsExactlyInAnyOrder(
+                        firstOffer(savedTwoOffers.get(0).id()),
+                        secondOffer(savedTwoOffers.get(1).id())
+                )
         );
 
 
@@ -137,7 +143,7 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
         //then
         MvcResult mvcResultWithOneOffers = performGetResultsWithExistingId.andExpect(status().isOk()).andExpect(content().json("""
                         {
-                        "message": "Offer with id 9999 not found",
+                        "message": "Offer with id 1000 not found",
                         "status": "NOT_FOUND"
                         }
                         """.trim())
@@ -148,7 +154,7 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
         });
         assertAll(
                 () -> assertThat(oneOffer.size()).isEqualTo(1),
-                () -> assertThat(oneOffer.get(0)).isEqualTo(firstOffer())
+                () -> assertThat(oneOffer.get(0)).isEqualTo(firstOffer(savedTwoOffers.get(0).id()))
         );
 
 //      step 13: there are 2 new offers in external HTTP server
@@ -183,10 +189,12 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
 //        then
         assertAll(
                 () -> assertThat(fourOffers.size()).isEqualTo(4),
-                () -> assertThat(fourOffers.contains(firstOffer())).isTrue(),
-                () -> assertThat(fourOffers.contains(secondOffer())).isTrue(),
-                () -> assertThat(fourOffers.contains(thirdOffer())).isTrue(),
-                () -> assertThat(fourOffers.contains(fourthOffer())).isTrue()
+                () -> assertThat(fourOffers).containsExactlyInAnyOrder(
+                        firstOffer(savedTwoOffers.get(0).id()),
+                        secondOffer(savedTwoOffers.get(0).id()),
+                        thirdOffer(savedTwoOffers.get(0).id()),
+                        fourthOffer(savedTwoOffers.get(0).id())
+                )
         );
 
 //      step 16: user made POST /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and offer as body and system returned CREATED(201) with saved offer
@@ -281,23 +289,23 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
                       }]""".trim();
     }
 
-    private OfferResponseDto firstOffer() {
-        return new OfferResponseDto("1000", "BlueSoft Sp. z o.o.", "7 000 – 9 000 PLN",
+    private OfferResponseDto firstOffer(String id) {
+        return new OfferResponseDto(id, "BlueSoft Sp. z o.o.", "7 000 – 9 000 PLN",
                 "Junior Java Developer", "https://nofluffjobs.com/pl/job/junior-java-developer-bluesoft-remote-hfuanrre");
     }
 
-    private OfferResponseDto secondOffer() {
-        return new OfferResponseDto("2000", "Efigence SA", "16 000 – 18 000 PLN",
+    private OfferResponseDto secondOffer(String id) {
+        return new OfferResponseDto(id, "Efigence SA", "16 000 – 18 000 PLN",
                 "Java (CMS) Developer", "https://nofluffjobs.com/pl/job/java-cms-developer-efigence-warszawa-b4qs8loh");
     }
 
-    private OfferResponseDto thirdOffer() {
-        return new OfferResponseDto("3000", "Sollers Consulting", "7 500 – 11 500 PLN",
+    private OfferResponseDto thirdOffer(String id) {
+        return new OfferResponseDto(id, "Sollers Consulting", "7 500 – 11 500 PLN",
                 "Junior Java Developer", "https://nofluffjobs.com/pl/job/junior-java-developer-sollers-consulting-warszawa-s6et1ucc");
     }
 
-    private OfferResponseDto fourthOffer() {
-        return new OfferResponseDto("4000", "Vertabelo S.A.", "7 000 – 9 000 PLN",
+    private OfferResponseDto fourthOffer(String id) {
+        return new OfferResponseDto(id, "Vertabelo S.A.", "7 000 – 9 000 PLN",
                 "Junior Full Stack Developer", "https://nofluffjobs.com/pl/job/junior-full-stack-developer-vertabelo-remote-k7m9xpnm");
     }
 }
