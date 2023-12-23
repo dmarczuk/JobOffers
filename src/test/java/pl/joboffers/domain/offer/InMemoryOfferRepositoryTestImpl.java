@@ -1,6 +1,6 @@
 package pl.joboffers.domain.offer;
 
-import net.bytebuddy.description.type.TypeDescription;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +21,7 @@ public class InMemoryOfferRepositoryTestImpl implements OfferRepository {
     @Override
     public <S extends Offer> S save(S entity) {
         if(existsByOfferUrl(entity.offerUrl())) {
-            throw new OfferDuplicateException("Offer url [" + entity.offerUrl() + "] already exist in database");
+            throw new DuplicateKeyException("Offer url [" + entity.offerUrl() + "] already exist in database");
         } else {
             String id = UUID.randomUUID().toString();
             Offer savedOffer = new Offer(id, entity.companyName(), entity.position(), entity.salary(), entity.offerUrl());

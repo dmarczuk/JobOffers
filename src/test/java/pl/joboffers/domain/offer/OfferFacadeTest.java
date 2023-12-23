@@ -2,6 +2,7 @@ package pl.joboffers.domain.offer;
 
 import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.Test;
+import org.springframework.dao.DuplicateKeyException;
 import pl.joboffers.domain.offer.dto.OfferRequestDto;
 import pl.joboffers.domain.offer.dto.OfferResponseDto;
 import pl.joboffers.domain.offer.exceptions.OfferNotFoundException;
@@ -44,7 +45,7 @@ class OfferFacadeTest {
 
         //then
         AssertionsForClassTypes.assertThat(thrown)
-                .isInstanceOf(OfferDuplicateException.class)
+                .isInstanceOf(DuplicateKeyException.class)
                 .hasMessage("Offer url [" + offerToSave.offerUrl() + "] already exist in database");
     }
 
@@ -74,16 +75,16 @@ class OfferFacadeTest {
         //then
         AssertionsForClassTypes.assertThat(thrown)
                 .isInstanceOf(OfferNotFoundException.class)
-                .hasMessage("Offer not found");
+                .hasMessage("Offer with id " + savedOffer.id() + 1 + " not found");
     }
 
     @Test
     public void should_return_all_offers() {
         //given
-        Set<OfferResponseDto> offersInDatabase = CreatorOfferFacadeTestImpl.createDatabaseWith_4_Offers(offerFacade);
+        List<OfferResponseDto> offersInDatabase = CreatorOfferFacadeTestImpl.createDatabaseWith_4_Offers(offerFacade);
 
         //when
-        Set<OfferResponseDto> allOffers = offerFacade.findAllOffers();
+        List<OfferResponseDto> allOffers = offerFacade.findAllOffers();
 
         //then
         assertThat(allOffers.size()).isEqualTo(4);
@@ -124,7 +125,7 @@ class OfferFacadeTest {
 //                )
 
         //when
-        Set<OfferResponseDto> savedOffers = offerFacade.fetchAllOffersAndSaveAllIfNotExists();
+        List<OfferResponseDto> savedOffers = offerFacade.fetchAllOffersAndSaveAllIfNotExists();
 
         //then
         assertThat(savedOffers.size()).isEqualTo(2);
@@ -139,7 +140,7 @@ class OfferFacadeTest {
         //given
 
         //when
-        Set<OfferResponseDto> savedOffers = offerFacade.fetchAllOffersAndSaveAllIfNotExists();
+        List<OfferResponseDto> savedOffers = offerFacade.fetchAllOffersAndSaveAllIfNotExists();
 
         //then
         assertThat(savedOffers.size()).isEqualTo(6);

@@ -1,7 +1,7 @@
 joboffers:
   offer:
     scheduler:
-      delayTime: "*/1 * * * * *"
+      delayTime: "*/10 * * * * *"
 
 scheduling:
   enabled: false
