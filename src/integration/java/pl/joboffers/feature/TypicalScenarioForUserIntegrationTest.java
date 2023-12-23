@@ -135,26 +135,28 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
 
 
 //      step 12: user made GET /offers/1000 and system returned OK(200) with offer
+        //given
+        String idOfFirstAddedOffers = twoOffers.get(0).id();
         //when
-        ResultActions performGetResultsWithExistingId = mockMvc.perform(get("/offers/1000")
+        ResultActions performGetResultsWithExistingId = mockMvc.perform(get("/offers/" + idOfFirstAddedOffers)
                 .contentType(MediaType.APPLICATION_JSON)
         );
 
         //then
-        MvcResult mvcResultWithOneOffers = performGetResultsWithExistingId.andExpect(status().isOk()).andExpect(content().json("""
-                        {
-                        "message": "Offer with id 1000 not found",
-                        "status": "NOT_FOUND"
-                        }
-                        """.trim())
-        ).andReturn();
+        MvcResult mvcResultWithOneOffers = performGetResultsWithExistingId.andExpect(status().isOk()).andReturn();
+//                .andExpect(content().json("""
+//                        {
+//                        "message": "Offer with id 1000 not found",
+//                        "status": "NOT_FOUND"
+//                        }
+//                        """.trim())
         String jsonWithOneOffer = mvcResultWithOneOffers.getResponse().getContentAsString(StandardCharsets.UTF_8);
-        List<OfferResponseDto> oneOffer = objectMapper.readValue(jsonWithOneOffer, new TypeReference<>(){
+        OfferResponseDto oneOffer = objectMapper.readValue(jsonWithOneOffer, new TypeReference<>(){
 
         });
         assertAll(
-                () -> assertThat(oneOffer.size()).isEqualTo(1),
-                () -> assertThat(oneOffer.get(0)).isEqualTo(firstOffer(savedTwoOffers.get(0).id()))
+                () -> assertThat(oneOffer).isNotNull(),
+                () -> assertThat(oneOffer).isEqualTo(firstOffer(savedTwoOffers.get(0).id()))
         );
 
 //      step 13: there are 2 new offers in external HTTP server
@@ -163,7 +165,7 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
                 .willReturn(WireMock.aResponse()
                         .withStatus(HttpStatus.OK.value())
                         .withHeader("Content-Type", "application/json")
-                        .withBody(giveAdditionalTwoOffers())
+                        .withBody(giveFourOffers())
                 ));
 
 
@@ -191,9 +193,9 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
                 () -> assertThat(fourOffers.size()).isEqualTo(4),
                 () -> assertThat(fourOffers).containsExactlyInAnyOrder(
                         firstOffer(savedTwoOffers.get(0).id()),
-                        secondOffer(savedTwoOffers.get(0).id()),
-                        thirdOffer(savedTwoOffers.get(0).id()),
-                        fourthOffer(savedTwoOffers.get(0).id())
+                        secondOffer(savedTwoOffers.get(1).id()),
+                        thirdOffer(savedTwoNewOffers.get(0).id()),
+                        fourthOffer(savedTwoNewOffers.get(1).id())
                 )
         );
 
@@ -272,10 +274,24 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
                      }]""".trim();
     }
 
-    private String giveAdditionalTwoOffers() {
+    private String giveFourOffers() {
         return """
                 [
                     {
+                          "id": "1000",
+                          "title": "Junior Java Developer",
+                          "company": "BlueSoft Sp. z o.o.",
+                          "salary": "7 000 – 9 000 PLN",
+                          "offerUrl": "https://nofluffjobs.com/pl/job/junior-java-developer-bluesoft-remote-hfuanrre"
+                     },
+                     {
+                          "id": "2000",
+                          "title": "Java (CMS) Developer",
+                          "company": "Efigence SA",
+                          "salary": "16 000 – 18 000 PLN",
+                          "offerUrl": "https://nofluffjobs.com/pl/job/java-cms-developer-efigence-warszawa-b4qs8loh"
+                     },
+                     {
                           "title": "Junior Java Developer",
                           "company": "Sollers Consulting",
                           "salary": "7 500 – 11 500 PLN",
