@@ -10,17 +10,10 @@ import pl.joboffers.infrastructure.offer.http.OfferFetcherRestTemplate;
 import pl.joboffers.infrastructure.offer.http.OfferFetcherRestTemplateConfigurationProperties;
 
 
-@Configuration
 public class OfferFetcherRestTemplateErrorIntegrationTestConfig extends OfferFetcherClientConfig {
 
-    public OfferFetcherRestTemplateErrorIntegrationTestConfig(OfferFetcherRestTemplateConfigurationProperties properties) {
-        super(properties);
-    }
-
-
-
-    public OfferFetchable remoteOfferFetcherClient(int port) {
-        RestTemplate restTemplate = restTemplate(restTemplateResponseErrorHandler());
+    public OfferFetchable remoteOfferFetcherClient(int port, int connectionTimeout, int readTimeout) {
+        RestTemplate restTemplate = restTemplate(connectionTimeout, readTimeout, restTemplateResponseErrorHandler());
         String uri = "http://localhost";
         return new OfferFetcherRestTemplate(restTemplate, uri, port);
     }

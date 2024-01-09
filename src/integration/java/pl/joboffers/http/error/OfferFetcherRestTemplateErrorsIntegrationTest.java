@@ -22,7 +22,7 @@ public class OfferFetcherRestTemplateErrorsIntegrationTest {
             .options(wireMockConfig().dynamicPort())
             .build();
     OfferFetcherRestTemplateConfigurationProperties properties = new OfferFetcherRestTemplateConfigurationProperties(1500, 1000, "http://localhost", wireMockServer.getPort());
-    OfferFetchable remoteOfferFetcherClient = new OfferFetcherRestTemplateErrorIntegrationTestConfig(properties).remoteOfferFetcherClient(wireMockServer.getPort());
+    OfferFetchable remoteOfferFetcherClient = new OfferFetcherRestTemplateErrorIntegrationTestConfig().remoteOfferFetcherClient(wireMockServer.getPort(), 1000, 1000);
 
     @Test
     void should_return_500_exception_when_fault_connection_reset_by_peer() {
