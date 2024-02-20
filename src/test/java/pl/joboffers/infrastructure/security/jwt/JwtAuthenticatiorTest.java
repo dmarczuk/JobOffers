@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class JwtAuthenticatorTest {
+class JwtAuthenticatorFacadeTest {
 
     @Test
     public void f() {
