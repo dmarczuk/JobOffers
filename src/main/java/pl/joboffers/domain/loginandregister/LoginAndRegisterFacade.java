@@ -1,6 +1,7 @@
 package pl.joboffers.domain.loginandregister;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import pl.joboffers.domain.loginandregister.dto.RegisterUserDto;
 import pl.joboffers.domain.loginandregister.dto.RegistrationResultDto;
 import pl.joboffers.domain.loginandregister.dto.UserDto;
@@ -9,6 +10,7 @@ import pl.joboffers.domain.loginandregister.exception.UserNotFoundException;
 import java.util.Optional;
 
 @RequiredArgsConstructor
+@Component
 public class LoginAndRegisterFacade {
 
     private final UserValidator userValidator;
