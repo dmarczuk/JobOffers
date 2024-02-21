@@ -1,15 +1,12 @@
 package pl.joboffers.domain.loginandregister;
 
-import net.bytebuddy.implementation.bytecode.Throw;
 import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.authentication.BadCredentialsException;
 import pl.joboffers.domain.loginandregister.dto.RegisterUserDto;
 import pl.joboffers.domain.loginandregister.dto.RegistrationResultDto;
 import pl.joboffers.domain.loginandregister.dto.UserDto;
-import pl.joboffers.domain.loginandregister.exception.UserNotFoundException;
 import pl.joboffers.domain.loginandregister.exception.UserRegistrationException;
-
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -18,7 +15,7 @@ class LoginAndRegisterFacadeTest {
 
     //UserValidator userValidator = new UserValidator();
     LoginAndRegisterFacade loginAndRegisterFacade = new LoginAndRegisterFacade(
-            new UserValidator(),
+//            new UserValidator(),
             new InMemoryUserRepositoryTestImpl()
     );
 
@@ -73,7 +70,7 @@ class LoginAndRegisterFacadeTest {
 
         //then
         AssertionsForClassTypes.assertThat(thrown)
-                .isInstanceOf(UserNotFoundException.class)
+                .isInstanceOf(BadCredentialsException.class)
                 .hasMessage("User not found");
 
     }

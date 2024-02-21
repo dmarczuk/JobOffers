@@ -13,12 +13,9 @@ import pl.joboffers.domain.offer.OfferFacade;
 import pl.joboffers.domain.offer.OfferFetchable;
 import pl.joboffers.domain.offer.dto.OfferResponseDto;
 import pl.joboffers.infrastructure.offer.scheduler.OfferFetcherScheduler;
-import java.nio.charset.StandardCharsets;
 
-import java.util.HashSet;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -68,7 +65,14 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
                         """.trim()
                 ).contentType(MediaType.APPLICATION_JSON_VALUE));
 
-        failedLoginRequest.andExpect(status().isUnauthorized());
+        failedLoginRequest
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().json("""
+                        {
+                        "message" = ""Bad Credentials"",
+                        "status" = "UNAUTHORIZED";
+                        }
+                        """.trim()));
 
 
 //      step 4: user made GET /offers with no jwt token and system returned UNAUTHORIZED(401)
