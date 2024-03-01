@@ -15,8 +15,8 @@ public class LoginUserDetailsService implements UserDetailsService {
     private final LoginAndRegisterFacade loginAndRegisterFacade;
     @Override
     public UserDetails loadUserByUsername(String username) throws BadCredentialsException {
-        loginAndRegisterFacade.findByUsername(username);
-        return null;
+        UserDto userDto = loginAndRegisterFacade.findByUsername(username);
+        return getUser(userDto);
     }
 
     private org.springframework.security.core.userdetails.User getUser(UserDto user) {

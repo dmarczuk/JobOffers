@@ -25,6 +25,7 @@
         <mockito.version>4.9.0</mockito.version>
         <awaitility.version>4.2.0</awaitility.version>
         <springfox.version>3.0.0</springfox.version>
+        <java-jwt.version>4.0.0</java-jwt.version>
     </properties>
 
     <dependencies>
@@ -125,7 +126,12 @@
             <version>${awaitility.version}</version>
             <scope>test</scope>
         </dependency>
-
+        <!-- JWT -->
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>${java-jwt.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
