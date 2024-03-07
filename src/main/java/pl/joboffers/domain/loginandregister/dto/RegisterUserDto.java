@@ -1,4 +1,5 @@
 package pl.joboffers.domain.loginandregister.dto;
 
-public record RegisterUserDto(String username, String password, String email) {
+public record RegisterUserDto(String username, String password, String email
+) {
 }
