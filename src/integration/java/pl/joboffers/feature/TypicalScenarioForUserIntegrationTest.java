@@ -91,7 +91,7 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
                         .content("""
                                 {
                                 "username": "someUser",
-                                "password": "somepassword"
+                                "password": "somePassword"
                                 }
                                 """.trim())
                         .contentType(MediaType.APPLICATION_JSON_VALUE));
