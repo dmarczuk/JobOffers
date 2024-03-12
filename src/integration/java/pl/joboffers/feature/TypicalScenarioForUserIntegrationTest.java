@@ -128,7 +128,7 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
 
 //      step 7: user made GET /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and system returned OK(200) with 0 offers
         //given
-        String offersUrl = "offers";
+        String offersUrl = "/offers";
         //when
         ResultActions performGetResultWithOffers = mockMvc.perform(get(offersUrl)
                         .header("Authorization", "Bearer " + token)
@@ -163,6 +163,7 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
 //      step 10: user made GET /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and system returned OK(200) with 2 offers with ids: 1000 and 2000
         //when
         ResultActions performGetResultWithTwoOffers = mockMvc.perform(get("/offers")
+                .header("Authorization", "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON)
         );
         MvcResult mvcResultWithTwoOffers = performGetResultWithTwoOffers.andExpect(status().isOk()).andReturn();
@@ -184,6 +185,7 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
 //      step 11: user made GET /offers/9999 and system returned NOT_FOUND(404) with message “Offer with id 9999 not found”
         //when
         ResultActions performGetResultsWithNotExistingId = mockMvc.perform(get("/offers/9999")
+                .header("Authorization", "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON)
         );
 
@@ -203,6 +205,7 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
         String idOfFirstAddedOffers = twoOffers.get(0).id();
         //when
         ResultActions performGetResultsWithExistingId = mockMvc.perform(get("/offers/" + idOfFirstAddedOffers)
+                .header("Authorization", "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON)
         );
 
@@ -244,6 +247,7 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
 //      step 15: user made GET /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and system returned OK(200) with 4 offers with ids: 1000,2000, 3000 and 4000
         //when
         ResultActions performGetResultWithTwoNewOffers = mockMvc.perform(get("/offers")
+                .header("Authorization", "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON)
         );
         MvcResult mvcResultWithFourOffers = performGetResultWithTwoNewOffers.andExpect(status().isOk()).andReturn();
@@ -266,6 +270,7 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
 //      step 16: user made POST /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and offer as body and system returned CREATED(201) with saved offer
         //when
         ResultActions performGetResultWithAddOffer = mockMvc.perform(post("/offers")
+                .header("Authorization", "Bearer " + token)
                 .content("""           
                       {
                           "company": "testCompany",
@@ -296,7 +301,8 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
 //      step 17: user made GET /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and system returned OK(200) with 1 offer
         //when
         ResultActions performGetResultWithOfferAddedByUser = mockMvc.perform(get("/offers")
-                        .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON)
         );
         MvcResult mvcResultFromUser = performGetResultWithOfferAddedByUser.andExpect(status().isOk()).andReturn();
         String jsonWithOffersFromUser = mvcResultFromUser.getResponse().getContentAsString(StandardCharsets.UTF_8);

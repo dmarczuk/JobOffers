@@ -21,3 +21,10 @@ joboffers:
 
 scheduling:
   enabled: true
+
+
+auth:
+  jwt:
+    expirationDays: 86400000
+    secret: ${JWT_SECRET}
+    issuer: job-offers

@@ -4,8 +4,10 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -15,9 +17,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
 
+@Component
+@AllArgsConstructor
 public class JwtAuthTokenFilter extends OncePerRequestFilter {
 
-//    private final JwtConfigurationProperties properties;
+    private final JwtConfigurationProperties properties;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -32,7 +36,8 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
     }
 
     private UsernamePasswordAuthenticationToken getUsernamePasswordAuthenticationToken(String token) {
-        String secretKey = "secretKey";
+        String secretKey = properties.secret();
+//        String secretKey = "secretKey";  //don't work, why??? ->  with big letter don't work, but why?
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
         JWTVerifier verifier = JWT.require(algorithm)
                 .build();
