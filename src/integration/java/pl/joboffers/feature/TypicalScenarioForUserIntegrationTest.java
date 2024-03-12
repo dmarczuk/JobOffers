@@ -120,23 +120,25 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
         MvcResult mvcResult1 = successfulLoginRequest.andExpect(status().isOk()).andReturn();
         String json = mvcResult1.getResponse().getContentAsString();
         JwtResponseDto jwtResponse = objectMapper.readValue(json, JwtResponseDto.class);
+        String token = jwtResponse.token();
         assertAll(
                 () -> assertThat(jwtResponse.username()).isEqualTo("someUser"),
                 () -> assertThat(jwtResponse.token()).matches(Pattern.compile("^([A-Za-z0-9-_=]+\\.)+([A-Za-z0-9-_=])+\\.?$"))
         );
 
 //      step 7: user made GET /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and system returned OK(200) with 0 offers
-                //when
-                ResultActions performGetResultWithOffers = mockMvc.perform(get("/offers")
+        //given
+        String offersUrl = "offers";
+        //when
+        ResultActions performGetResultWithOffers = mockMvc.perform(get(offersUrl)
+                        .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
-                );
+        );
+        //then
         MvcResult mvcResult = performGetResultWithOffers.andExpect(status().isOk()).andReturn();
         String jsonWithOffers = mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8);
         List<OfferResponseDto> jobOffers = objectMapper.readValue(jsonWithOffers, new TypeReference<>(){
-
         });
-
-//        then
         assertThat(jobOffers.size()).isEqualTo(0);
 
 
