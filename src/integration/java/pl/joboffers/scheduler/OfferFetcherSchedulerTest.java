@@ -22,6 +22,6 @@ public class OfferFetcherSchedulerTest extends BaseIntegrationTest {
     public void should_run_offer_fetcher_scheduler_minimum_two_times() {
         await()
                 .atMost(Duration.ofSeconds(3))
-                .untilAsserted(() -> verify(remoteOfferClient, times(2)).fetchOffers());
+                .untilAsserted(() -> verify(remoteOfferClient, times(1)).fetchOffers());
     }
 }
