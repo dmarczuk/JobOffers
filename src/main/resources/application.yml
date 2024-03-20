@@ -1,11 +1,11 @@
 spring:
-#  redis:
-#    host: ${REDIS_HOST:localhost}
-#    port: ${REDIS_PORT:63792}
-#  cache:
-#    type: redis
-#    redis:
-#      time-to-live: PT10s
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:63792}
+  cache:
+    type: redis
+    redis:
+      time-to-live: PT10s
 #      to change on PT60M
   data:
     mongodb:
@@ -33,6 +33,6 @@ scheduling:
 
 auth:
   jwt:
-    expirationDays: 86400000
+    expirationDays: 30
     secret: ${JWT_SECRET}
-    issuer: job-offers
+    issuer: job-offers-backend
