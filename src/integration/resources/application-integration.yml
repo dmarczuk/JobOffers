@@ -10,4 +10,4 @@ spring:
   cache:
     type: none
     redis:
-      time-to-live: PT10S
+      time-to-live: PT1S

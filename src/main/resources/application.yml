@@ -5,8 +5,8 @@ spring:
   cache:
     type: redis
     redis:
-      time-to-live: PT10s
-#      to change on PT60M
+      time-to-live: PT60M
+
   data:
     mongodb:
       uri: mongodb://admin:admin@localhost:27017/job-offers
