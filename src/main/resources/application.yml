@@ -1,4 +1,12 @@
 spring:
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:63792}
+  cache:
+    type: redis
+    redis:
+      time-to-live: PT60M
+
   data:
     mongodb:
       uri: mongodb://admin:admin@localhost:27017/job-offers
@@ -25,6 +33,6 @@ scheduling:
 
 auth:
   jwt:
-    expirationDays: 86400000
+    expirationDays: 30
     secret: ${JWT_SECRET}
-    issuer: job-offers
+    issuer: job-offers-backend
