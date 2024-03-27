@@ -56,13 +56,13 @@ docker compose up
 
 <li>Alternatively you can run docker-compose file through your IDE</li>
 
+<br>
+
 After everything build and ready, you can start application and test using Swagger or Postman
 
 ## In future
 There are some plans to do in the future:  
--> implement simple frontend  
--> deploying application on AWS  
--> add new roles like ADMIN who would be able to remove offers or users  
--> add other websites from which user can fetch new offers
-
-
+<li>implement simple frontend</li> 
+<li>deploying application on AWS</li>
+<li>add new roles like ADMIN who would be able to remove offers or users</li>
+<li>add other websites from which user can fetch new offers</li>
