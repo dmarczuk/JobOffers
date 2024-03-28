@@ -2,8 +2,10 @@ package pl.joboffers.domain.offer;
 
 import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.dao.DuplicateKeyException;
 import pl.joboffers.domain.offer.dto.OfferRequestDto;
 import pl.joboffers.domain.offer.dto.OfferResponseDto;
+import pl.joboffers.domain.offer.exceptions.OfferDuplicateException;
 import pl.joboffers.domain.offer.exceptions.OfferNotFoundException;
 
 import java.util.List;
@@ -31,8 +33,12 @@ public class OfferFacade {
 
     public OfferResponseDto saveOffer(OfferRequestDto offerRequestDto) {
         final Offer offer = OfferMapper.mapperOfferRequestDtoToOffer(offerRequestDto);
-        Offer offerSaved = offerRepository.save(offer);
-        return OfferMapper.mapperOfferToOfferResponseDto(offerSaved);
+        try {
+            Offer offerSaved = offerRepository.save(offer);
+            return OfferMapper.mapperOfferToOfferResponseDto(offerSaved);
+        } catch (DuplicateKeyException e) {
+            throw new OfferDuplicateException("Offer url already exist");
+        }
     }
 
     public List<OfferResponseDto> fetchAllOffersAndSaveAllIfNotExists() {
