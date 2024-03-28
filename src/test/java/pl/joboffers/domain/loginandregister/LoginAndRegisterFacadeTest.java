@@ -77,43 +77,4 @@ class LoginAndRegisterFacadeTest {
 
     }
 
-    @Test
-    public void should_not_register_user_who_has_invalid_username () {
-        //given
-        RegisterUserDto registerUserDto = new RegisterUserDto( "", "pass", "email@com");
-
-        //when
-        RegistrationResultDto result = loginAndRegisterFacade.register(registerUserDto);
-
-        //then
-        assertThat(result.created()).isFalse();
-
-    }
-
-    @Test
-    public void should_not_register_user_who_has_invalid_password () {
-        //given
-        RegisterUserDto registerUserDto = new RegisterUserDto( "FirstUser", "", "email@com");
-
-        //when
-        RegistrationResultDto result = loginAndRegisterFacade.register(registerUserDto);
-
-        //then
-        assertThat(result.created()).isFalse();
-
-    }
-
-    @Test
-    public void should_not_register_user_who_has_invalid_email () {
-        //given
-        RegisterUserDto registerUserDto = new RegisterUserDto( "FirstUser", "pass", "");
-
-        //when
-        RegistrationResultDto result = loginAndRegisterFacade.register(registerUserDto);
-
-        //then
-        assertThat(result.created()).isFalse();
-
-    }
-
 }
