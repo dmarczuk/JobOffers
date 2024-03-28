@@ -11,6 +11,8 @@ import pl.joboffers.domain.loginandregister.LoginAndRegisterFacade;
 import pl.joboffers.domain.loginandregister.dto.RegisterUserDto;
 import pl.joboffers.domain.loginandregister.dto.RegistrationResultDto;
 
+import javax.validation.Valid;
+
 @RestController
 @AllArgsConstructor
 public class RegisterController {
@@ -19,7 +21,7 @@ public class RegisterController {
     private final PasswordEncoder bCryptPasswordEncoder;
 
     @PostMapping("/register")
-    public ResponseEntity<RegistrationResultDto> register(@RequestBody RegisterUserDto registerUserDto) {
+    public ResponseEntity<RegistrationResultDto> register(@RequestBody @Valid RegisterUserDto registerUserDto) {
         String encodedPassword = bCryptPasswordEncoder.encode(registerUserDto.password());
         RegistrationResultDto registerResult = loginAndRegisterFacade.register(
                 new RegisterUserDto(registerUserDto.username(), encodedPassword, registerUserDto.email()));

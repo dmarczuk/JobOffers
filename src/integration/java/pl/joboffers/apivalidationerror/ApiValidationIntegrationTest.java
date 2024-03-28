@@ -92,7 +92,8 @@ public class ApiValidationIntegrationTest extends BaseIntegrationTest {
                 .content("""
                                 {
                                 "username": "someUser",
-                                "password": "somePassword"
+                                "password": "somePassword",
+                                "email": "some@email"
                                 }
                                 """.trim())
                 .contentType(MediaType.APPLICATION_JSON_VALUE));
@@ -103,7 +104,8 @@ public class ApiValidationIntegrationTest extends BaseIntegrationTest {
                 .content("""
                                 {
                                 "username": "someUser",
-                                "password": "somePassword"
+                                "password": "somePassword",
+                                "email": "some@email"
                                 }
                                 """.trim())
                 .contentType(MediaType.APPLICATION_JSON_VALUE));
@@ -117,6 +119,82 @@ public class ApiValidationIntegrationTest extends BaseIntegrationTest {
         assertAll(
                 () -> assertThat(result.message()).isEqualTo("User already exist in database"),
                 () -> assertThat(result.status()).isEqualTo(HttpStatus.CONFLICT)
+        );
+    }
+
+    @Test
+    public void should_not_register_user_with_invalid_username() throws Exception {
+        // given && when
+        ResultActions failedRegisterAction = mockMvc.perform(post("/register")
+                .content("""
+                                {
+                                "username": "",
+                                "password": "somePassword"
+                                }
+                                """.trim())
+                .contentType(MediaType.APPLICATION_JSON_VALUE));
+
+        //then
+        MvcResult mvcResult = failedRegisterAction.andExpect(status().isBadRequest()).andReturn();
+        String json = mvcResult.getResponse().getContentAsString();
+        ApiValidationErrorDto result = objectMapper.readValue(json, ApiValidationErrorDto.class);
+
+        //then
+        assertAll(
+                () -> assertThat(result.messages().contains("username should not be empty")).isTrue(),
+                () -> assertThat(result.messages().contains("email should not be empty")).isTrue(),
+                () -> assertThat(result.messages().contains("email name should not be null")).isTrue(),
+                () -> assertThat(result.status()).isEqualTo(HttpStatus.BAD_REQUEST)
+        );
+    }
+
+    @Test
+    public void should_not_register_user_with_invalid_password() throws Exception {
+        // given && when
+        ResultActions failedRegisterAction = mockMvc.perform(post("/register")
+                .content("""
+                                {
+                                "username": "someUser",
+                                "password": "short",
+                                "email": "email@com"
+                                }
+                                """.trim())
+                .contentType(MediaType.APPLICATION_JSON_VALUE));
+
+        //then
+        MvcResult mvcResult = failedRegisterAction.andExpect(status().isBadRequest()).andReturn();
+        String json = mvcResult.getResponse().getContentAsString();
+        ApiValidationErrorDto result = objectMapper.readValue(json, ApiValidationErrorDto.class);
+
+        //then
+        assertAll(
+                () -> assertThat(result.messages().contains("password should have minimum 8 characters")).isTrue(),
+                () -> assertThat(result.status()).isEqualTo(HttpStatus.BAD_REQUEST)
+        );
+    }
+
+    @Test
+    public void should_not_register_user_with_invalid_email() throws Exception {
+        // given && when
+        ResultActions failedRegisterAction = mockMvc.perform(post("/register")
+                .content("""
+                                {
+                                "username": "someUser",
+                                "password": "somePassword",
+                                "email": "invalidEmail"
+                                }
+                                """.trim())
+                .contentType(MediaType.APPLICATION_JSON_VALUE));
+
+        //then
+        MvcResult mvcResult = failedRegisterAction.andExpect(status().isBadRequest()).andReturn();
+        String json = mvcResult.getResponse().getContentAsString();
+        ApiValidationErrorDto result = objectMapper.readValue(json, ApiValidationErrorDto.class);
+
+        //then
+        assertAll(
+                () -> assertThat(result.messages().contains("email should be valid")).isTrue(),
+                () -> assertThat(result.status()).isEqualTo(HttpStatus.BAD_REQUEST)
         );
     }
 }
