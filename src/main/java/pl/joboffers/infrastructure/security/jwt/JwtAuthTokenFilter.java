@@ -37,7 +37,6 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
 
     private UsernamePasswordAuthenticationToken getUsernamePasswordAuthenticationToken(String token) {
         String secretKey = properties.secret();
-//        String secretKey = "secretKey";  //don't work, why??? ->  with big letter don't work, but why?
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
         JWTVerifier verifier = JWT.require(algorithm)
                 .build();

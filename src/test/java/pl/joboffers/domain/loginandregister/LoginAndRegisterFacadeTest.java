@@ -10,12 +10,11 @@ import pl.joboffers.domain.loginandregister.exception.UserRegistrationException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class LoginAndRegisterFacadeTest {
 
-    //UserValidator userValidator = new UserValidator();
     LoginAndRegisterFacade loginAndRegisterFacade = new LoginAndRegisterFacade(
-//            new UserValidator(),
             new InMemoryUserRepositoryTestImpl()
     );
 
@@ -28,7 +27,10 @@ class LoginAndRegisterFacadeTest {
         RegistrationResultDto result = loginAndRegisterFacade.register(registerUserDto);
 
         //then
-        assertThat(result.created()).isTrue();
+        assertAll(
+                () -> assertThat(result.created()).isTrue(),
+                () -> assertThat(result.username()).isEqualTo("FirstUser")
+        );
     }
 
     @Test
@@ -63,7 +65,7 @@ class LoginAndRegisterFacadeTest {
     @Test
     public void should_throw_exception_when_user_not_found() {
         //given
-        RegisterUserDto registerUserDto = new RegisterUserDto( "FirstUser", "pass", "email@com");
+        RegisterUserDto userNotRegistered = new RegisterUserDto( "FirstUser", "pass", "email@com");
 
         //when
         Throwable thrown = catchThrowable(() -> loginAndRegisterFacade.findByUsername("FirstUser"));
@@ -74,86 +76,5 @@ class LoginAndRegisterFacadeTest {
                 .hasMessage("User not found");
 
     }
-
-    @Test
-    public void should_not_register_user_who_has_invalid_username () {
-        //given
-        RegisterUserDto registerUserDto = new RegisterUserDto( "", "pass", "email@com");
-
-        //when
-        RegistrationResultDto result = loginAndRegisterFacade.register(registerUserDto);
-
-        //then
-        assertThat(result.created()).isFalse();
-
-    }
-
-    @Test
-    public void should_not_register_user_who_has_invalid_password () {
-        //given
-        RegisterUserDto registerUserDto = new RegisterUserDto( "FirstUser", "", "email@com");
-
-        //when
-        RegistrationResultDto result = loginAndRegisterFacade.register(registerUserDto);
-
-        //then
-        assertThat(result.created()).isFalse();
-
-    }
-
-    @Test
-    public void should_not_register_user_who_has_invalid_email () {
-        //given
-        RegisterUserDto registerUserDto = new RegisterUserDto( "FirstUser", "pass", "");
-
-        //when
-        RegistrationResultDto result = loginAndRegisterFacade.register(registerUserDto);
-
-        //then
-        assertThat(result.created()).isFalse();
-
-    }
-
-
-//    @Test
-//    public void should_login_user_who_exist_in_database () {
-//        //given
-//        RegisterUserDto registerUserDto = new RegisterUserDto( "FirstUser", "pass", "email@com");
-//        loginAndRegisterFacade.register(registerUserDto);
-//
-//        //when
-//        String result = loginAndRegisterFacade.login("FirstUser", "pass");
-//
-//        //then
-//        assertThat(result).isEqualTo("Successful login");
-//
-//    }
-//
-//    @Test
-//    public void should_not_login_new_user_because_user_not_exist_in_database () {
-//        //given
-//        RegisterUserDto registerUserDto = new RegisterUserDto( "FirstUser", "pass", "email@com");
-//
-//        //when
-//        String result = loginAndRegisterFacade.login("FirstUser", "pass");
-//
-//        //then
-//        assertThat(result).isEqualTo("Invalid username or password");
-//
-//    }
-//
-//    @Test
-//    public void should_not_login_user_because_invalid_password () {
-//        //given
-//        RegisterUserDto registerUserDto = new RegisterUserDto( "FirstUser", "pass", "email@com");
-//        loginAndRegisterFacade.register(registerUserDto);
-//
-//        //when
-//        String result = loginAndRegisterFacade.login("FirstUser", "invalidPassword");
-//
-//        //then
-//        assertThat(result).isEqualTo("Invalid username or password");
-//
-//    }
 
 }

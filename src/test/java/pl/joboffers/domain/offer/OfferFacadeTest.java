@@ -2,13 +2,11 @@ package pl.joboffers.domain.offer;
 
 import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.Test;
-import org.springframework.dao.DuplicateKeyException;
 import pl.joboffers.domain.offer.dto.OfferRequestDto;
 import pl.joboffers.domain.offer.dto.OfferResponseDto;
-import pl.joboffers.domain.offer.exceptions.OfferNotFoundException;
 import pl.joboffers.domain.offer.exceptions.OfferDuplicateException;
+import pl.joboffers.domain.offer.exceptions.OfferNotFoundException;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -34,7 +32,7 @@ class OfferFacadeTest {
     }
 
     @Test
-    public void should_throw_duplicate_key_exception_when_with_offer_url_exists() {
+    public void should_throw_offer_duplicate_exception_when_with_offer_url_exists() {
         //given
         OfferRequestDto offerInDatabase = new OfferRequestDto("company", "3000", "position", "url");
         OfferRequestDto offerToSave = new OfferRequestDto("company", "3000", "position", "url");
@@ -45,8 +43,8 @@ class OfferFacadeTest {
 
         //then
         AssertionsForClassTypes.assertThat(thrown)
-                .isInstanceOf(DuplicateKeyException.class)
-                .hasMessage("Offer url [" + offerToSave.offerUrl() + "] already exist in database");
+                .isInstanceOf(OfferDuplicateException.class)
+                .hasMessage("Offer url already exist in database");
     }
 
     @Test
@@ -145,6 +143,5 @@ class OfferFacadeTest {
         //then
         assertThat(savedOffers.size()).isEqualTo(6);
     }
-
 
 }

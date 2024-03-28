@@ -6,13 +6,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
-import pl.joboffers.domain.offer.dto.OfferResponseDto;
-import pl.joboffers.domain.offer.exceptions.OfferDuplicateException;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 public class InMemoryOfferRepositoryTestImpl implements OfferRepository {
@@ -48,10 +45,6 @@ public class InMemoryOfferRepositoryTestImpl implements OfferRepository {
         return Optional.ofNullable(inMemoryDatabase.get(id));
     }
 
-//    @Override
-//    public Optional<Offer> findByOfferUrl(String offerUrl) {
-//        return Optional.of(inMemoryDatabase.get(offerUrl));
-//    }
     @Override
     public boolean existsByOfferUrl(String offerUrl) {
         return inMemoryDatabase.values().stream()

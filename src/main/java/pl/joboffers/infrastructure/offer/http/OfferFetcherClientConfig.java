@@ -1,7 +1,5 @@
 package pl.joboffers.infrastructure.offer.http;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
@@ -36,6 +34,5 @@ public class OfferFetcherClientConfig {
                                             @Value("${joboffers.offer.http.client.config.port:5057}") int port) {
         return new OfferFetcherRestTemplate(restTemplate, uri, port);
     }
-
 
 }

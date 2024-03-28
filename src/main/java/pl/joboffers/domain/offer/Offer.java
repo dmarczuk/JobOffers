@@ -1,16 +1,11 @@
 package pl.joboffers.domain.offer;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.NonNull;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.util.Objects;
-
-//@AllArgsConstructor
 @Builder
 @Document("offers")
 record Offer(

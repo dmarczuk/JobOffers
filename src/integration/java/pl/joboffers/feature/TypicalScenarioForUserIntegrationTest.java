@@ -39,7 +39,7 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
     OfferFacade offerFacade;
 
     @Test
-    public void should_user_go_by_whole_happy_path() throws Exception { //?? name of test ??????
+    public void should_user_go_by_whole_happy_path() throws Exception {
 
 //      step 1: there are no offers in external HTTP server (http://ec2-3-120-147-150.eu-central-1.compute.amazonaws.com:5057/offers)
         //given && when && then
@@ -91,7 +91,8 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
                         .content("""
                                 {
                                 "username": "someUser",
-                                "password": "somePassword"
+                                "password": "somePassword",
+                                "email": "some@email"
                                 }
                                 """.trim())
                         .contentType(MediaType.APPLICATION_JSON_VALUE));
@@ -112,7 +113,8 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
                 .content("""
                         {
                         "username": "someUser",
-                        "password": "somePassword"
+                        "password": "somePassword",
+                        "email": "some@email"
                         }
                         """.trim()
                 ).contentType(MediaType.APPLICATION_JSON_VALUE));
