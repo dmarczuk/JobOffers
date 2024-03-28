@@ -13,7 +13,6 @@ import pl.joboffers.domain.loginandregister.exception.UserAlreadyExistException;
 @Component
 public class LoginAndRegisterFacade {
 
-//    private final UserValidator userValidator;
     private final UserRepository userRepository;
 
     public RegistrationResultDto register(RegisterUserDto registerUserDto) {
@@ -27,15 +26,6 @@ public class LoginAndRegisterFacade {
             return new RegistrationResultDto(savedUser.id(), true, savedUser.username());
         } catch (DuplicateKeyException e) {
             throw new UserAlreadyExistException("User already exist");
-        }
-    }
-
-    public String login(String username, String password) {
-        UserDto userDto = findByUsername(username);
-        if (userDto != null && userDto.password().equals(password)) {
-            return "Successful login";
-        } else {
-            return "Invalid username or password";
         }
     }
 

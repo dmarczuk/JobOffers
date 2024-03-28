@@ -14,9 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class LoginAndRegisterFacadeTest {
 
-    //UserValidator userValidator = new UserValidator();
     LoginAndRegisterFacade loginAndRegisterFacade = new LoginAndRegisterFacade(
-//            new UserValidator(),
             new InMemoryUserRepositoryTestImpl()
     );
 
@@ -117,47 +115,5 @@ class LoginAndRegisterFacadeTest {
         assertThat(result.created()).isFalse();
 
     }
-
-
-//    @Test
-//    public void should_login_user_who_exist_in_database () {
-//        //given
-//        RegisterUserDto registerUserDto = new RegisterUserDto( "FirstUser", "pass", "email@com");
-//        loginAndRegisterFacade.register(registerUserDto);
-//
-//        //when
-//        String result = loginAndRegisterFacade.login("FirstUser", "pass");
-//
-//        //then
-//        assertThat(result).isEqualTo("Successful login");
-//
-//    }
-//
-//    @Test
-//    public void should_not_login_new_user_because_user_not_exist_in_database () {
-//        //given
-//        RegisterUserDto registerUserDto = new RegisterUserDto( "FirstUser", "pass", "email@com");
-//
-//        //when
-//        String result = loginAndRegisterFacade.login("FirstUser", "pass");
-//
-//        //then
-//        assertThat(result).isEqualTo("Invalid username or password");
-//
-//    }
-//
-//    @Test
-//    public void should_not_login_user_because_invalid_password () {
-//        //given
-//        RegisterUserDto registerUserDto = new RegisterUserDto( "FirstUser", "pass", "email@com");
-//        loginAndRegisterFacade.register(registerUserDto);
-//
-//        //when
-//        String result = loginAndRegisterFacade.login("FirstUser", "invalidPassword");
-//
-//        //then
-//        assertThat(result).isEqualTo("Invalid username or password");
-//
-//    }
 
 }

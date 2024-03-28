@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 class CreatorOfferFacadeTestImpl {
 
 
-
     public static OfferFacade createOfferFacadeForTest() {
         InMemoryOfferRepositoryTestImpl database = new InMemoryOfferRepositoryTestImpl();
         InMemoryFetcherTestImpl fetcher = new InMemoryFetcherTestImpl(

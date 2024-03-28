@@ -37,7 +37,7 @@ public class OfferFacade {
             Offer offerSaved = offerRepository.save(offer);
             return OfferMapper.mapperOfferToOfferResponseDto(offerSaved);
         } catch (DuplicateKeyException e) {
-            throw new OfferDuplicateException("Offer url already exist");
+            throw new OfferDuplicateException("Offer url already exist in database");
         }
     }
 
