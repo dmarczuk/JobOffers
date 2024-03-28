@@ -10,6 +10,7 @@ import pl.joboffers.domain.loginandregister.exception.UserRegistrationException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class LoginAndRegisterFacadeTest {
 
@@ -28,7 +29,10 @@ class LoginAndRegisterFacadeTest {
         RegistrationResultDto result = loginAndRegisterFacade.register(registerUserDto);
 
         //then
-        assertThat(result.created()).isTrue();
+        assertAll(
+                () -> assertThat(result.created()).isTrue(),
+                () -> assertThat(result.username()).isEqualTo("FirstUser")
+        );
     }
 
     @Test
@@ -63,7 +67,7 @@ class LoginAndRegisterFacadeTest {
     @Test
     public void should_throw_exception_when_user_not_found() {
         //given
-        RegisterUserDto registerUserDto = new RegisterUserDto( "FirstUser", "pass", "email@com");
+        RegisterUserDto userNotRegistered = new RegisterUserDto( "FirstUser", "pass", "email@com");
 
         //when
         Throwable thrown = catchThrowable(() -> loginAndRegisterFacade.findByUsername("FirstUser"));
