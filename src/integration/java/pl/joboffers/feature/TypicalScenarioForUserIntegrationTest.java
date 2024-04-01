@@ -38,6 +38,7 @@ public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
     @Autowired
     OfferFacade offerFacade;
 
+
     @Test
     public void should_user_go_by_whole_happy_path() throws Exception {
 
