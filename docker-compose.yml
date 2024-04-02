@@ -3,6 +3,7 @@ version: '3.1'
 services:
 
   mongo:
+    container_name: mongo
     image: mongo:4.0.10
     restart: always
     ports:
@@ -10,7 +11,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
-      MONGO_INITDB_DATABASE: job-offers
+      MONGO_INITDB_ROOT_DATABASE: job-offers
     volumes:
       - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
 
@@ -41,10 +42,10 @@ services:
   joboffers:
     container_name: joboffers
     build: .
-#    image: 211125550513.dkr.ecr.eu-north-1.amazonaws.com/job_offers
+#    image: 211125550513.dkr.ecr.eu-north-1.amazonaws.com/job_offers:latest
     restart: always
     ports:
-      - '8080:8080'
+      - '8000:8080'
     environment:
       MONGO_USER: admin
       MONGO_PASSWORD: admin

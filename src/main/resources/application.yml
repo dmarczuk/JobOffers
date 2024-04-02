@@ -9,7 +9,7 @@ spring:
 
   data:
     mongodb:
-      uri: mongodb://admin:admin@localhost:27017/job-offers
+      uri: mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/${MONGO_DB_NAME}?authSource=${MONGO_AUTH_SOURCE}
       auto-index-creation: true
   mvc:
     pathmatch:
