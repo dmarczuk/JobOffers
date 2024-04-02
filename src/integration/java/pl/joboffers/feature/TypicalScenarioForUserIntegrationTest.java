@@ -6,12 +6,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
+import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.utility.DockerImageName;
 import pl.joboffers.BaseIntegrationTest;
 import pl.joboffers.domain.loginandregister.dto.RegistrationResultDto;
-import pl.joboffers.domain.offer.OfferFacade;
-import pl.joboffers.domain.offer.OfferFetchable;
 import pl.joboffers.domain.offer.dto.OfferResponseDto;
 import pl.joboffers.infrastructure.loginandregister.controller.dto.JwtResponseDto;
 import pl.joboffers.infrastructure.offer.scheduler.OfferFetcherScheduler;
@@ -29,15 +32,24 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class TypicalScenarioForUserIntegrationTest extends BaseIntegrationTest {
 
-    @Autowired
-    OfferFetchable offerFetchable;
+//    @Autowired
+//    OfferFetchable offerFetchable;
 
     @Autowired
     OfferFetcherScheduler scheduler;
 
-    @Autowired
-    OfferFacade offerFacade;
+//    @Autowired
+//    OfferFacade offerFacade;
 
+    @Container
+    public static final MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:4.0.10"));
+
+    @DynamicPropertySource
+    public static void propertyOverride(DynamicPropertyRegistry registry) {
+        registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
+        registry.add("offer.http.client.config.uri", () -> WIRE_MOCK_HOST);
+        registry.add("offer.http.client.config.port", () -> wireMockServer.getPort());
+    }
 
     @Test
     public void should_user_go_by_whole_happy_path() throws Exception {
