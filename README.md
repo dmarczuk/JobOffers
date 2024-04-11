@@ -4,7 +4,8 @@
 Web application, which is created in Spring Boot. Users can display offers,
 which are fetching by scheduler. Also authorized users by token, can add their new offers.
 The main functionality of this project is collecting offers, from various sources, in one place.
-Full version of project will be available on AWS soon.
+Swagger of application is available on AWS: http://ec2-13-60-38-194.eu-north-1.compute.amazonaws.com:8000/swagger-ui/
+Full version with frontend will be available in the future.
 
 
 ## Main responsibilities application
