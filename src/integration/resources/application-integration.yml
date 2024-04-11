@@ -1,7 +1,7 @@
 joboffers:
   offer:
     scheduler:
-      delayTime: "*/10 * * * * *"
+      delayTime: "*/1 * * * * *"
 
 scheduling:
   enabled: false
@@ -10,4 +10,4 @@ spring:
   cache:
     type: none
     redis:
-      time-to-live: PT1S
+      time-to-live: PT10S

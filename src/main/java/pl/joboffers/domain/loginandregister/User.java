@@ -6,9 +6,6 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.UserDetailsManager;
-import wiremock.org.checkerframework.common.aliasing.qual.Unique;
 
 import java.util.Collection;
 

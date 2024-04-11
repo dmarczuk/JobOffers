@@ -28,6 +28,7 @@
         <java-jwt.version>4.0.0</java-jwt.version>
         <jedis.version>3.3.0</jedis.version>
         <spring-data-redis.version>2.4.5</spring-data-redis.version>
+<!--        <spring-boot-dependencies.version>3.0.5</spring-boot-dependencies.version>-->
 
     </properties>
 
@@ -57,17 +58,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-test</artifactId>
-            <scope>test</scope>
         </dependency>
 
 <!--        TEST CONTAINERS-->
@@ -121,12 +112,6 @@
             <version>${wiremock-jre8.version}</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.github.tomakehurst</groupId>
-            <artifactId>wiremock-jre8-standalone</artifactId>
-            <version>2.35.0</version>
-            <scope>compile</scope>
-        </dependency>
         <!--AWAITILITY-->
         <dependency>
             <groupId>org.awaitility</groupId>
@@ -160,15 +145,16 @@
     </dependencies>
 
     <build>
+        <finalName>job-offers</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <image>
-                        <builder>paketobuildpacks/builder-jammy-base:latest</builder>
-                    </image>
-                </configuration>
+<!--                <configuration>-->
+<!--                    <image>-->
+<!--                        <builder>paketobuildpacks/builder-jammy-base:latest</builder>-->
+<!--                    </image>-->
+<!--                </configuration>-->
             </plugin>
         </plugins>
     </build>

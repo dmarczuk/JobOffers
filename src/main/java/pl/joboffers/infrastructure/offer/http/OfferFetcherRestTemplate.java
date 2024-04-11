@@ -4,17 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
-import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.util.UriComponentsBuilder;
 import pl.joboffers.domain.offer.OfferFetchable;
 import pl.joboffers.domain.offer.dto.JobOfferResponse;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 @AllArgsConstructor
 @Log4j2
@@ -30,7 +27,8 @@ public class OfferFetcherRestTemplate implements OfferFetchable {
         HttpHeaders headers = new HttpHeaders();
         final HttpEntity<HttpHeaders> requestEntity = new HttpEntity<>(headers);
         try {
-            String url = getUrlForService("/offers");
+            String urlForService = getUrlForService("/offers");
+            final String url = UriComponentsBuilder.fromHttpUrl(urlForService).toUriString();
             ResponseEntity<List<JobOfferResponse>> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity,
                     new ParameterizedTypeReference<>() {
                     });
